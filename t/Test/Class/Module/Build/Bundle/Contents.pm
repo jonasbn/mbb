@@ -17,3 +17,5 @@ sub contents : Test(1) {
     
     $build->ACTION_contents;
 };
+
+1;
