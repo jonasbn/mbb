@@ -5,11 +5,11 @@ package Module::Build::Bundle;
 use strict;
 use warnings;
 use Data::Dumper;
-use base 'Module::Build';
-use Module::Build::Base;
 use Carp qw(croak);
 use Cwd qw(getcwd);
 use Tie::IxHash;
+
+use base 'Module::Build::Base';
 
 our $VERSION = '0.01';
 
@@ -46,7 +46,7 @@ sub ACTION_contents {
 
     my $cwd = getcwd();
 
-    my $file = "$cwd/lib/Task/BeLike/JONASBN.pm";
+    my $file = "$cwd/t/Dummy.pm";
     open(FIN, '+<', $file)
         or croak "Unable to open file: $file - $!";
         
@@ -62,4 +62,67 @@ sub ACTION_contents {
 	return 1;
 }
 
+#lifted from Module::Build::Base
+sub create_mymeta {
+  my ($self) = @_;
+  my $mymetafile = $self->mymetafile;
+  my $metafile = $self->metafile;
+
+  # cleanup
+  if ( $self->delete_filetree($mymetafile) ) {
+    $self->log_verbose("Removed previous '$mymetafile'\n");
+  }
+  $self->log_info("Creating new '$mymetafile' with configuration results\n");
+
+  # use old meta and update prereqs, if possible
+  my $mymeta;
+  if ( -f $metafile ) {
+    $mymeta = eval { $self->read_metafile( $self->metafile ) };
+  }
+  # if we read META OK, just update it
+  if ( defined $mymeta ) {
+    my $prereqs = $self->_normalize_prereqs;
+    for my $t ( keys %$prereqs ) {
+        $mymeta->{$t} = $prereqs->{$t};
+    }
+  }
+  # but generate from scratch, ignoring errors if META doesn't exist
+  else {
+    $mymeta = $self->get_metadata( fatal => 0 );
+  }
+
+  my $package = ref $self;
+  
+  # MYMETA is always static
+  $mymeta->{dynamic_config} = 0;
+  # Note which M::B created it
+  #JONASBN: changed from originally lifted code
+  $mymeta->{generated_by}
+    = "$package version $VERSION";
+
+  $self->write_metafile( $mymetafile, $mymeta );
+  return 1;
+}
+
+#lifted from Module::Build::Base
+sub get_metadata {
+  my ($self, %args) = @_;
+
+  my $metadata = {};
+  $self->prepare_metadata( $metadata, undef, \%args );
+
+  my $package = ref $self;
+
+  #JONASBN: changed from originally lifted code  
+  $metadata->{generated_by}
+    = "$package version $VERSION";
+
+  #JONASBN: changed from originally lifted code
+  $metadata->{configure_requires} 
+    = { "$package" => $VERSION };
+  
+  return $metadata;
+}
+
 1;
+
