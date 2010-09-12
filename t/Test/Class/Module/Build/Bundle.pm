@@ -10,15 +10,7 @@ use Module::Build::YAML;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 
-use base qw(Test::Class);
-
-sub startup : Test(startup) {
-    my $test = shift;
-    
-    my $yaml = Module::Build::YAML->new();
-    
-    $test->{yaml} = $yaml;
-}
+use base qw(Test::Class Test::Class::Module::Build::Regression);
 
 sub setup : Test(setup => 2) {
     my $test = shift;
@@ -36,70 +28,6 @@ sub setup : Test(setup => 2) {
     $test->{package} = ref $build;
     $test->{build} = $build;
     $test->{canonical} = $test->{version};
-};
-
-sub do_create_meta : Test(7) {
-    my $test = shift;
-
-    my $build = $test->{build};
-    my $yaml = $test->{yaml};
-    my $package = $test->{package};
-    my $version = $test->{version};
-    my $canonical_version = $test->{canonical};
-    
-    ok($build->metafile('t/META.yml'));
-
-    ok($build->do_create_metafile);
-
-    my $meta = $yaml->read($build->metafile)->[0];
-
-    like($meta->{generated_by}, qr/\A$package version \d+\.\d+\z/);
-    
-    like($meta->{generated_by}, qr/\A$package version $version\z/);
-
-    ok(my $req = $meta->{configure_requires});
-    
-    like($req->{$package}, qr/\A\d+\.\d+\z/);
-    
-    is($req->{$package}, $canonical_version);
-
-    $test->{file} = $build->metafile;
-};
-
-sub create_mymeta : Test(7) {
-    my $test = shift;
-    
-    my $build = $test->{build};
-    my $yaml = $test->{yaml};
-    my $package = $test->{package};
-    my $version = $test->{version};
-    my $canonical_version = $test->{canonical};
-    
-    ok($build->mymetafile('t/MYMETA.yml'));
-
-    ok($build->create_mymeta());
-
-    my $meta = $yaml->read($build->mymetafile)->[0];
-
-    like($meta->{generated_by}, qr/\A$package version \d+\.\d+\z/);
-
-    like($meta->{generated_by}, qr/\A$package version $version\z/);
-
-    ok(my $req = $meta->{configure_requires});
-
-    like($req->{$package}, qr/\A\d+\.\d+\z/);
-    
-    is($req->{$package}, $canonical_version);
-    
-    $test->{file} = $build->mymetafile;
-};
-
-sub teardown : Test(teardown) {
-    my $test = shift;
-    
-    my $file = $test->{file};
-    
-    unlink($file) or die "Unable to remove file: $file - $!";
 };
 
 1;

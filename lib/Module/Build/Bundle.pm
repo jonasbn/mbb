@@ -8,6 +8,7 @@ use Data::Dumper;
 use Carp qw(croak);
 use Cwd qw(getcwd);
 use Tie::IxHash;
+use Config;
 
 use base 'Module::Build::Base';
 
@@ -34,12 +35,22 @@ sub ACTION_contents {
     
     my $pod = "=head1 CONTENTS\n\n=over\n\n";
     foreach ($sorted->Keys) {
-        my ($key, $val) = $sorted->Shift();
+        my ($module, $version) = $sorted->Shift();
         
-        if ($val) {
-            $pod .= "=item * L<$key>, $val\n\n";
+        
+
+        if ($Config{PERL_VERSION} >= 12) {
+            if ($version) {
+                $pod .= "=item * L<$module|$module>, L<$version|http://search.cpan.org/dist/Module-Build-$version/lib/Module/Build.pm>\n\n";
+            } else {
+                $pod .= "=item * L<$module|$module>\n\n";
+            }        
         } else {
-            $pod .= "=item * L<$key>\n\n";
+            if ($version) {
+                $pod .= "=item * L<$module|$module>, $version\n\n";
+            } else {
+                $pod .= "=item * L<$module|$module>\n\n";
+            }
         }
     }
     $pod .= "=back\n\n=head1 SEE ALSO";
