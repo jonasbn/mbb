@@ -14,6 +14,7 @@ use base 'Module::Build::Base';
 use constant EXTENDED_POD_LINK_VERSION => 5.12.0;
 
 our $VERSION = '0.01';
+
 #HACK: we need a writable copy for testing purposes
 our $myPERL_VERSION = $^V; 
 
