@@ -2,17 +2,20 @@ package Module::Build::Bundle;
 
 # $Id$
 
+use 5.6.0; #$^V
 use strict;
 use warnings;
-use Data::Dumper;
 use Carp qw(croak);
 use Cwd qw(getcwd);
 use Tie::IxHash;
-use Config;
-
+use English qw( -no_match_vars );
 use base 'Module::Build::Base';
 
+use constant EXTENDED_POD_LINK_VERSION => 5.12.0;
+
 our $VERSION = '0.01';
+#HACK: we need a writable copy for testing purposes
+our $myPERL_VERSION = $^V; 
 
 sub ACTION_build {
     my $self = shift;
@@ -26,7 +29,7 @@ sub ACTION_build {
 
 sub ACTION_contents {
     my $self = shift;
-    
+   
     #Fetching requirements from Build.PL
     my @list = %{$self->requires()};
     
@@ -37,11 +40,13 @@ sub ACTION_contents {
     foreach ($sorted->Keys) {
         my ($module, $version) = $sorted->Shift();
         
+        my $dist = $module =~ s/::/\-/g;
+        my $module_path = $module =~ s[::][/]g;
+        $module_path .= '.pm';
         
-
-        if ($Config{PERL_VERSION} >= 12) {
+        if ( $myPERL_VERSION ge EXTENDED_POD_LINK_VERSION ) {
             if ($version) {
-                $pod .= "=item * L<$module|$module>, L<$version|http://search.cpan.org/dist/Module-Build-$version/lib/Module/Build.pm>\n\n";
+                $pod .= "=item * L<$module|$module>, L<$version|http://search.cpan.org/dist/$dist-$version/lib/$module_path>\n\n";
             } else {
                 $pod .= "=item * L<$module|$module>\n\n";
             }        
@@ -53,16 +58,19 @@ sub ACTION_contents {
             }
         }
     }
-    $pod .= "=back\n\n=head1 SEE ALSO";
+    $pod .= "=back\n\n=head1";
 
     my $cwd = getcwd();
 
-    my $file = "$cwd/t/Dummy.pm";
+    my @path = split /::/, $self->{properties}->{module_name}
+        || $self->{properties}->{module_name};
+
+    my $file = $cwd.'/'. (join '/', @path) .'.pm';
     open(FIN, '+<', $file)
         or croak "Unable to open file: $file - $!";
         
     my $contents = join "", <FIN>;
-    $contents =~ s/=head1 CONTENTS\n\n.*=head1 SEE ALSO/$pod/s;
+    $contents =~ s/=head1\s*CONTENTS\s*.*=head1/$pod/s;
     close(FIN);
 
     open(FOUT, '>', $file)
