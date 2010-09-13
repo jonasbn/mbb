@@ -34,10 +34,12 @@ sub ACTION_contents {
     #Fetching requirements from Build.PL
     my @list = %{$self->requires()};
     
+    my $section_header = $self->notes('section_header') || 'CONTENTS';
+    
     my $sorted = 'Tie::IxHash'->new(@list);
     $sorted->SortByKey();
     
-    my $pod = "=head1 CONTENTS\n\n=over\n\n";
+    my $pod = "=head1 $section_header\n\n=over\n\n";
     foreach ($sorted->Keys) {
         my ($module, $version) = $sorted->Shift();
         
@@ -73,10 +75,10 @@ sub ACTION_contents {
     my $contents = join '', <FIN>;
     close(FIN) or croak "Unable to close file: $file - $!";
 
-    my $rv = $contents =~ s/=head1\s*CONTENTS\s*.*=head1/$pod/s;
+    my $rv = $contents =~ s/=head1\s*$section_header\s*.*=head1/$pod/s;
 
     if (! $rv) {
-        croak "No CONTENTS section replaced";
+        croak "No $section_header section replaced";
     }
 
     open(FOUT, '>', $file)

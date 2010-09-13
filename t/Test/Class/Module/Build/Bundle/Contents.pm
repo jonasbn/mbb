@@ -6,6 +6,7 @@ use strict;
 use warnings;
 use Test::More;
 use File::Copy qw(cp);
+use Test::Exception;
 
 use base qw(Test::Class);
 
@@ -53,12 +54,50 @@ sub extended : Test(1) {
     ok($build->ACTION_contents);
 };
 
+sub death_by_section_header : Test(1) {
+    my $test = shift;
+    
+    my $build = $test->{build};
+    $build->notes('section_header' => 'TO DEATH');
+        
+    dies_ok { $build->ACTION_contents } 'Unable to replace section';
+};
+
+sub section_header : Test(2) {
+    my $test = shift;
+
+    ok(my $build = Module::Build::Bundle->new(
+        module_name  => 'Dummy2',
+        dist_version => '6.66',
+        dist_author  => 'jonasbn',
+        dist_abstract => 'this is a dummy',
+        requires => {
+            'Module::Build' => '0.36',
+        },
+    ), 'calling constructor');
+    
+    $build->notes('section_header' => 'DEPENDENCIES');
+
+    $test->{file} = 'Dummy2.pm';
+    
+    cp("t/$test->{file}", "Dummy2.pm")
+        or die "Unable to copy file: $test->{file} - $!";
+
+    ok($build->ACTION_contents);
+    
+    $test->{build} = $build;
+};
+
+
 sub teardown : Test(teardown) {
     my $test = shift;
     
     my $file = $test->{file};
+    my $build = $test->{build};
     
     unlink($file) or die "Unable to remove file: $file - $!";
+    
+    $build->notes('section_header' => '');
 }
 
 1;
