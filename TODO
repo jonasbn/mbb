@@ -1,0 +1,16 @@
+TODO file for Module::Build::Bundle
+
+$Id$
+
+See also the project site road map:
+
+http://logiclab.jira.com/browse/MBB#selectedTab=com.atlassian.jira.plugin.system.project%3Aroadmap-panel
+
+- The initial version holds two methods from Module::Build::Base, which have
+  been lifted and changed. The plan is to have these two patched in
+  Module::Build::Base, but for know we keep the changed versions, until the
+  patches have been created, sent, evaluated and hopefully accepted.
+  
+  See also:
+    http://logiclab.jira.com/browse/MBB-7
+    http://logiclab.jira.com/browse/MBB-8
