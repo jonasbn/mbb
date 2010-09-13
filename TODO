@@ -14,3 +14,9 @@ http://logiclab.jira.com/browse/MBB#selectedTab=com.atlassian.jira.plugin.system
   See also:
     http://logiclab.jira.com/browse/MBB-7
     http://logiclab.jira.com/browse/MBB-8
+
+- Replace regular expression based search and replace by Pod::Weaver
+  implementation.
+  
+  See also:
+    http://logiclab.jira.com/browse/MBB-11
