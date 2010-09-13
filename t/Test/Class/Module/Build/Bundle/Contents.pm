@@ -31,19 +31,19 @@ sub setup : Test(setup => 2) {
 
     $test->{build} = $build;
     $test->{file} = 'Dummy.pm';
-    
-    cp("t/$test->{file}", "$test->{file}")
-        or die "Unable to copy file: $test->{file} - $!";
 };
 
 sub contents : Test(3) {
     my $test = shift;
     
     my $build = $test->{build};
+
+    cp("t/$test->{file}", "$test->{file}")
+        or die "Unable to copy file: $test->{file} - $!";
     
     ok($build->ACTION_contents);
     
-    open FIN, '<', 'Dummy.pm' or die "Unable to open file: $!";
+    open FIN, '<', $test->{file} or die "Unable to open file: $!";
     my $content = join '', <FIN>;
     close FIN;
     
@@ -57,13 +57,16 @@ sub extended : Test(3) {
     my $test = shift;
     
     my $build = $test->{build};
+
+    cp("t/$test->{file}", "$test->{file}")
+        or die "Unable to copy file: $test->{file} - $!";
     
     #HACK: we cheat and pretend to be 5.12.0
     $Module::Build::Bundle::myPERL_VERSION = 5.12.0;
     
     ok($build->ACTION_contents);
 
-    open FIN, '<', 'Dummy.pm' or die "Unable to open file: $!";
+    open FIN, '<', $test->{file} or die "Unable to open file: $!";
     my $content = join '', <FIN>;
     close FIN;
     
@@ -75,6 +78,10 @@ sub death_by_section_header : Test(1) {
     my $test = shift;
     
     my $build = $test->{build};
+
+    cp("t/$test->{file}", "$test->{file}")
+        or die "Unable to copy file: $test->{file} - $!";
+
     $build->notes('section_header' => 'TO DEATH');
         
     dies_ok { $build->ACTION_contents } 'Unable to replace section';
