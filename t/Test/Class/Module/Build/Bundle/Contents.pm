@@ -24,7 +24,7 @@ sub setup : Test(setup => 2) {
         dist_author  => 'jonasbn',
         dist_abstract => 'this is a dummy',
         requires => {
-            'Module::Build' => '0.36',
+            'Module::Build' => '0',
         },
     ), 'calling constructor');
 
@@ -35,12 +35,25 @@ sub setup : Test(setup => 2) {
         or die "Unable to copy file: $test->{file} - $!";
 };
 
-sub contents : Test(1) {
+sub contents : Test(3) {
     my $test = shift;
     
-    my $build = $test->{build};
+    use_ok('Module::Build::Bundle');
     
+    ok(my $build = Module::Build::Bundle->new(
+        module_name  => 'Dummy',
+        dist_version => '6.66',
+        dist_author  => 'jonasbn',
+        dist_abstract => 'this is a dummy',
+        requires      => {
+            'Module::Build' => '0',
+            'Module::Info'  => '0.31',
+        }
+    ), 'calling constructor');
+
     ok($build->ACTION_contents);
+
+    $test->{build} = $build;
 };
 
 sub extended : Test(1) {
