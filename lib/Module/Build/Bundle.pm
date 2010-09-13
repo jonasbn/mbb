@@ -70,9 +70,14 @@ sub ACTION_contents {
     open(FIN, '+<', $file)
         or croak "Unable to open file: $file - $!";
         
-    my $contents = join "", <FIN>;
-    $contents =~ s/=head1\s*CONTENTS\s*.*=head1/$pod/s;
-    close(FIN);
+    my $contents = join '', <FIN>;
+    close(FIN) or croak "Unable to close file: $file - $!";
+
+    my $rv = $contents =~ s/=head1\s*CONTENTS\s*.*=head1/$pod/s;
+
+    if (! $rv) {
+        croak "No CONTENTS section replaced";
+    }
 
     open(FOUT, '>', $file)
         or croak "Unable to open file: $file - $!";
@@ -185,7 +190,7 @@ This documentation describes version 0.01
 
 =head2 create_mymeta
 
-=head2
+=head2 get_metadata
 
 =head1 DIAGNOSTICS
 
