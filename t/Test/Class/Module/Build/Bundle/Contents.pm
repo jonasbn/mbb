@@ -25,6 +25,7 @@ sub setup : Test(setup => 2) {
         dist_abstract => 'this is a dummy',
         requires => {
             'Module::Build' => '0',
+            'Module::Info' => '0.31',
         },
     ), 'calling constructor');
 
@@ -38,25 +39,21 @@ sub setup : Test(setup => 2) {
 sub contents : Test(3) {
     my $test = shift;
     
-    use_ok('Module::Build::Bundle');
+    my $build = $test->{build};
     
-    ok(my $build = Module::Build::Bundle->new(
-        module_name  => 'Dummy',
-        dist_version => '6.66',
-        dist_author  => 'jonasbn',
-        dist_abstract => 'this is a dummy',
-        requires      => {
-            'Module::Build' => '0',
-            'Module::Info'  => '0.31',
-        }
-    ), 'calling constructor');
-
     ok($build->ACTION_contents);
+    
+    open FIN, '<', 'Dummy.pm' or die "Unable to open file: $!";
+    my $content = join '', <FIN>;
+    close FIN;
+    
+    like($content, qr/=item \* L<Module::Build\|Module::Build>/s);
+    like($content, qr/=item \* L<Module::Info\|Module::Info>, 0\.31/);
 
     $test->{build} = $build;
 };
 
-sub extended : Test(1) {
+sub extended : Test(3) {
     my $test = shift;
     
     my $build = $test->{build};
@@ -65,6 +62,13 @@ sub extended : Test(1) {
     $Module::Build::Bundle::myPERL_VERSION = 5.12.0;
     
     ok($build->ACTION_contents);
+
+    open FIN, '<', 'Dummy.pm' or die "Unable to open file: $!";
+    my $content = join '', <FIN>;
+    close FIN;
+    
+    like($content, qr/=item \* L<Module::Build\|Module::Build>/s);
+    like($content, qr[=item \* L<Module::Info\|Module::Info>, L<0\.31\|http://search.cpan.org/dist/Module-Info-0.31/lib/Module/Info.pm>]);
 };
 
 sub death_by_section_header : Test(1) {

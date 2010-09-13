@@ -42,9 +42,12 @@ sub ACTION_contents {
     my $pod = "=head1 $section_header\n\n=over\n\n";
     foreach ($sorted->Keys) {
         my ($module, $version) = $sorted->Shift();
+
+        my $dist = $module;
+        $dist =~ s/::/\-/g;
         
-        my $dist = $module =~ s/::/\-/g;
-        my $module_path = $module =~ s[::][/]g;
+        my $module_path = $module;
+        $module_path =~ s[::][/]g;
         $module_path .= '.pm';
         
         if ( $myPERL_VERSION ge EXTENDED_POD_LINK_VERSION ) {
