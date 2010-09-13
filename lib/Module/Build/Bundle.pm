@@ -146,3 +146,88 @@ sub get_metadata {
 
 1;
 
+__END__
+
+=head1 NAME
+
+Module::Build::Bundle - sub class aimed at supporting Tasks and Bundles
+
+=head1 VERSION
+
+This documentation describes version 0.01
+
+=head1 SYNOPSIS
+
+    #In your Build.PL
+    use Module::Build::Bundle;
+    
+    #Example lifted from: Perl::Critic::logicLAB 
+    my $build = Module::Build::Bundle->new(
+        dist_author   => 'Jonas B. Nielsen (jonasbn), <jonasbn@cpan.org>',
+        module_name   => 'Perl::Critic::logicLAB',
+        license       => 'artistic',
+        create_readme => 1,
+        requires      => {
+            'Perl::Critic::Policy::logicLAB::ProhibitUseLib' => '0',
+            'Perl::Critic::Policy::logicLAB::RequireVersionFormat' => '0',
+        },
+    );
+    
+    $build->create_build_script();
+
+=head1 DESCRIPTION
+
+=head1 SUBROUTINES/METHODS
+
+=head2 ACTION_contents
+
+=head2 ACTION_build
+
+=head2 create_mymeta
+
+=head2
+
+=head1 DIAGNOSTICS
+
+=over
+
+=item * No <section> section to be replaced
+
+=back
+
+=head1 CONFIGURATION AND ENVIRONMENT
+
+=head1 DEPENDENCIES
+
+=over
+
+=item * L<Module::Build|Module::Build>
+
+=back
+
+=head1 INCOMPATIBILITIES
+
+=head1 BUGS AND LIMITATIONS
+
+=head2 CONTENTS
+
+The module does per default look for the section named: CONTENTS.
+
+This is the section used in Bundles, this can be overwritten using the section
+parameter.
+
+For example L<Perl::Critic::logicLAB|Perl::Critic::logicLAB> uses a section
+named POLICIES and L<Task::BeLike::JONASBN> uses DEPENDENCIES.
+
+The problem is that the section has to be present or else the contents action
+will throw an error.
+
+=head1 AUTHOR
+
+=over
+
+=item * Jonas B. Nielsen (jonasbn) C<< <jonasbn@cpan.org> >>
+
+=back
+
+=head1 LICENSE AND COPYRIGHT
