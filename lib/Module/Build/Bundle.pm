@@ -148,8 +148,7 @@ sub get_metadata {
     = "$package version $VERSION";
 
   #JONASBN: changed from originally lifted code
-  $metadata->{configure_requires} 
-    = { "$package" => $VERSION };
+  $metadata->{configure_requires} = { "$package" => $VERSION };
   
   return $metadata;
 }
@@ -160,7 +159,7 @@ __END__
 
 =head1 NAME
 
-Module::Build::Bundle - sub class aimed at supporting Tasks and Bundles
+Module::Build::Bundle - subclass for supporting Tasks and Bundles
 
 =head1 VERSION
 
@@ -187,15 +186,42 @@ This documentation describes version 0.01
 
 =head1 DESCRIPTION
 
+=head2 FEATURES
+
+=over
+
+=item * Autogeneration of POD for Bundle and Task distributions
+
+=item * Links to required/listed distributions, with or without versions
+
+=item * Links to specific versions of distributions for perl 5.12.0 if a version
+is specified
+
+=item * Inserts a POD section named CONTENTS or something specified by the
+caller
+
+=back
+
 =head1 SUBROUTINES/METHODS
 
 =head2 ACTION_contents
 
+This is the build action parsing the requirements specified in the F<Build.PL>
+file. It creates a POD section (see also L</FEATURES> above).
+
 =head2 ACTION_build
+
+This is a simple wrapper around the standard action: L<Module::Build|Module::Build>
+build action. It checks whether L</ACTION_contents> have been executed, if not
+it executes it.
 
 =head2 create_mymeta
 
+This method has been lifted from L<Module::Build|Module::Build>.
+
 =head2 get_metadata
+
+This method has been lifted from L<Module::Build|Module::Build>.
 
 =head1 DIAGNOSTICS
 
@@ -207,9 +233,14 @@ This documentation describes version 0.01
 
 =head1 CONFIGURATION AND ENVIRONMENT
 
+Module::Build::Bundle is primarily aimed at Bundle distributions. Their use is
+however no longer recommended and L<Task> provides a better way.
+
 =head1 DEPENDENCIES
 
 =over
+
+=item * perl 5.6.0
 
 =item * L<Module::Build|Module::Build>
 
@@ -217,7 +248,15 @@ This documentation describes version 0.01
 
 =head1 INCOMPATIBILITIES
 
+The distribution requires perl version from 5.6.0 and up.
+
 =head1 BUGS AND LIMITATIONS
+
+There are no known bugs or special limitations at this time.
+
+Currently the module only supports Bundle/Task distributions based on
+Module::Build. The implementation is based on a subclass of Module::Build, which
+can replace Module::Build (See: L</SYNOPSIS>).
 
 =head2 CONTENTS
 
@@ -232,6 +271,32 @@ named POLICIES and L<Task::BeLike::JONASBN> uses DEPENDENCIES.
 The problem is that the section has to be present or else the contents action
 will throw an error.
 
+=head1 SEE ALSO
+
+=over
+
+=item * L<Task|Task>
+
+=item * L<TaskBeLike::JONASBN|TaskBeLike::JONASBN>
+
+=item * L<Perl::Critic::logicLAB|Perl::Critic::logicLAB>
+
+=item * L<CPAN|CPAN>
+
+=item * L<http://cpansearch.perl.org/src/ANDK/CPAN-1.9402/lib/CPAN/Bundle.pm>
+
+=back
+
+=head1 ACKNOWLEDGEMENTS
+
+=over
+
+=item * Adam Kennedy (ADAMK) author of L<Task>, a very basic and simple solution
+
+=item * The L<Module::Build> developers
+
+=back
+
 =head1 AUTHOR
 
 =over
@@ -241,3 +306,4 @@ will throw an error.
 =back
 
 =head1 LICENSE AND COPYRIGHT
+

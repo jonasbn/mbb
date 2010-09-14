@@ -6,6 +6,7 @@ use strict;
 use warnings;
 use Test::More;
 use Module::Build::YAML;
+use Module::Build;
 
 use FindBin;
 use lib "$FindBin::Bin/../t";

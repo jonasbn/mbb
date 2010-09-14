@@ -8,7 +8,7 @@ use Test::More;
 use Module::Build::YAML;
 
 use FindBin;
-use lib "$FindBin::Bin/../lib";
+use lib "$FindBin::Bin/../t";
 
 use base qw(Test::Class Test::Class::Module::Build::Regression);
 
