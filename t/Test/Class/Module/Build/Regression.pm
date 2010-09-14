@@ -6,6 +6,7 @@ use strict;
 use warnings;
 use Test::More;
 use Module::Build::YAML;
+use Module::Build;
 
 use FindBin;
 use lib "$FindBin::Bin/../t";
@@ -66,7 +67,7 @@ sub do_create_meta : Test(7) {
     $test->{file} = $build->metafile;
 };
 
-sub create_mymeta : Test(7) {
+sub create_mymeta : Test(8) {
     my $test = shift;
     
     my $build = $test->{build};
@@ -74,7 +75,8 @@ sub create_mymeta : Test(7) {
     my $package = $test->{package};
     my $version = $test->{version};
     my $canonical_version = $test->{canonical};
-    
+
+    ok($build->metafile('t/META.yml'));    
     ok($build->mymetafile('t/MYMETA.yml'));
 
     ok($build->create_mymeta());

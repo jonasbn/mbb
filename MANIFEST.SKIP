@@ -46,3 +46,8 @@
 
 # Avoid archives of this distribution
 \bModule-Build-Bundle-[\d\.\_]+
+
+# Avoid project files
+\.komodoproject
+t/META.yml
+spikes
