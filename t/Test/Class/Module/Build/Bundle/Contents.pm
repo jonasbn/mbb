@@ -25,7 +25,7 @@ sub setup : Test(setup => 2) {
         dist_abstract => 'this is a dummy',
         requires => {
             'Module::Build' => '0',
-            'Module::Info' => '0.31',
+            'Text::Soundex' => '2.00',
         },
     ), 'calling constructor');
 
@@ -48,7 +48,7 @@ sub contents : Test(3) {
     close FIN;
     
     like($content, qr/=item \* L<Module::Build\|Module::Build>/s);
-    like($content, qr/=item \* L<Module::Info\|Module::Info>, 0\.31/);
+    like($content, qr/=item \* L<Text::Soundex\|Text::Soundex>, 2\.00/);
 
     $test->{build} = $build;
 };
@@ -71,7 +71,7 @@ sub extended : Test(3) {
     close FIN;
     
     like($content, qr/=item \* L<Module::Build\|Module::Build>/s);
-    like($content, qr[=item \* L<Module::Info\|Module::Info>, L<0\.31\|http://search.cpan.org/dist/Module-Info-0.31/lib/Module/Info.pm>]);
+    like($content, qr[=item \* L<Text::Soundex\|Text::Soundex>, L<2\.00\|http://search.cpan.org/dist/Text-Soundex-2\.00/Soundex.pm>]);
 };
 
 sub death_by_section_header : Test(1) {
