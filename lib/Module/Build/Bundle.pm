@@ -374,18 +374,6 @@ The distribution requires perl version from 5.6.0 and up.
 
 =head1 BUGS AND LIMITATIONS
 
-=head2 CONTENTS
-
-=over
-
-=item * the people behind L<Module::Build>, it is one of my favorite CPAN
-distributions. I have implemented sub-classes of Module::Build on several
-occassions and always with success.
-
-=back
-
-=head1 ACKNOWLEDGEMENTS
-
 There are no known bugs or special limitations at this time, but I am sure there
 are plenty of scenarios is distribution packaging the module is not currently
 handling.
