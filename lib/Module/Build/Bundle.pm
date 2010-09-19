@@ -418,7 +418,7 @@ The motivation was driven by two things.
 
 =item * The joy of fooling around with Module::Build
 
-=item The need for automating the documentation generation
+=item * The need for automating the documentation generation
 
 =back
 
