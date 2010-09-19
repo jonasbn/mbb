@@ -71,7 +71,7 @@ sub extended : Test(3) {
     close FIN;
     
     like($content, qr/=item \* L<Module::Build\|Module::Build>/s);
-    like($content, qr[=item \* L<Text::Soundex\|Text::Soundex>, L<2\.00\|http://search.cpan.org/dist/Text-Soundex-2\.00/Soundex.pm>]);
+    like($content, qr[=item \* L<Text::Soundex\|Text::Soundex>, L<2\.00\|http://search.cpan.org/dist/Text-Soundex-2\.00/lib/Text/Soundex.pm>]);
 };
 
 sub death_by_section_header : Test(1) {
