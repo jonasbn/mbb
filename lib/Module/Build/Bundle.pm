@@ -12,10 +12,6 @@ use English qw( -no_match_vars );
 
 use base qw(Module::Build);
 
-#use Module::Build::Base;
-#use vars qw(@ISA);
-#@ISA = qw(Module::Build::Base);
-
 use constant EXTENDED_POD_LINK_VERSION => 5.12.0;
 
 our $VERSION = '0.02';
