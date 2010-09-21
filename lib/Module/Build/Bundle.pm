@@ -10,9 +10,11 @@ use Cwd qw(getcwd);
 use Tie::IxHash;
 use English qw( -no_match_vars );
 
-use Module::Build::Base;
-use vars qw(@ISA);
-@ISA = qw(Module::Build::Base);
+use base qw(Module::Build);
+
+#use Module::Build::Base;
+#use vars qw(@ISA);
+#@ISA = qw(Module::Build::Base);
 
 use constant EXTENDED_POD_LINK_VERSION => 5.12.0;
 
@@ -75,7 +77,7 @@ sub ACTION_contents {
     my @path = split /::/, $self->{properties}->{module_name}
         || $self->{properties}->{module_name};
 
-    my $file = $cwd.'/'. (join '/', @path) .'.pm';
+    my $file = $cwd.'/lib/'. (join '/', @path) .'.pm';
     open(FIN, '+<', $file)
         or croak "Unable to open file: $file - $!";
         
@@ -156,67 +158,6 @@ sub get_metadata {
   
   return $metadata;
 }
-
-# Okay, this is the brute-force method of finding out what kind of
-# platform we're on.  I don't know of a systematic way.  These values
-# came from the latest (bleadperl) perlport.pod.
-
-my %OSTYPES = qw(
-		 aix       Unix
-		 bsdos     Unix
-		 beos      Unix
-		 dgux      Unix
-		 dragonfly Unix
-		 dynixptx  Unix
-		 freebsd   Unix
-		 linux     Unix
-		 haiku     Unix
-		 hpux      Unix
-		 irix      Unix
-		 darwin    Unix
-		 machten   Unix
-		 midnightbsd Unix
-		 mirbsd    Unix
-		 next      Unix
-		 openbsd   Unix
-		 netbsd    Unix
-		 dec_osf   Unix
-		 nto       Unix
-		 svr4      Unix
-		 svr5      Unix
-		 sco_sv    Unix
-		 unicos    Unix
-		 unicosmk  Unix
-		 solaris   Unix
-		 sunos     Unix
-		 cygwin    Unix
-		 os2       Unix
-		 interix   Unix
-		 gnu       Unix
-		 gnukfreebsd Unix
-		 nto       Unix
-
-		 dos       Windows
-		 MSWin32   Windows
-
-		 os390     EBCDIC
-		 os400     EBCDIC
-		 posix-bc  EBCDIC
-		 vmesa     EBCDIC
-
-		 MacOS     MacOS
-		 VMS       VMS
-		 VOS       VOS
-		 riscos    RiscOS
-		 amigaos   Amiga
-		 mpeix     MPEiX
-		);
-
-sub os_type { $OSTYPES{$^O} }
-
-sub is_vmsish { return ((os_type() || '') eq 'VMS') }
-sub is_windowsish { return ((os_type() || '') eq 'Windows') }
-sub is_unixish { return ((os_type() || '') eq 'Unix') }
 
 1;
 

@@ -38,12 +38,12 @@ sub contents : Test(3) {
     
     my $build = $test->{build};
 
-    cp("t/$test->{file}", "$test->{file}")
+    cp("t/$test->{file}", "lib/$test->{file}")
         or die "Unable to copy file: $test->{file} - $!";
     
     ok($build->ACTION_contents);
     
-    open FIN, '<', $test->{file} or die "Unable to open file: $!";
+    open FIN, '<', "lib/$test->{file}" or die "Unable to open file: $!";
     my $content = join '', <FIN>;
     close FIN;
     
@@ -58,15 +58,15 @@ sub extended : Test(3) {
     
     my $build = $test->{build};
 
-    cp("t/$test->{file}", "$test->{file}")
-        or die "Unable to copy file: $test->{file} - $!";
+    cp("t/$test->{file}", "lib/$test->{file}")
+        or die "Unable to copy file: lib/$test->{file} - $!";
     
     #HACK: we cheat and pretend to be 5.12.0
     $Module::Build::Bundle::myPERL_VERSION = 5.12.0;
     
     ok($build->ACTION_contents);
 
-    open FIN, '<', $test->{file} or die "Unable to open file: $!";
+    open FIN, '<', "lib/$test->{file}" or die "Unable to open file: $!";
     my $content = join '', <FIN>;
     close FIN;
     
@@ -79,8 +79,8 @@ sub death_by_section_header : Test(1) {
     
     my $build = $test->{build};
 
-    cp("t/$test->{file}", "$test->{file}")
-        or die "Unable to copy file: $test->{file} - $!";
+    cp("t/$test->{file}", "lib/$test->{file}")
+        or die "Unable to copy file: lib/$test->{file} - $!";
 
     $build->notes('section_header' => 'TO DEATH');
         
@@ -104,7 +104,7 @@ sub section_header : Test(2) {
 
     $test->{file} = 'Dummy2.pm';
     
-    cp("t/$test->{file}", "Dummy2.pm")
+    cp("t/$test->{file}", 'lib/Dummy2.pm')
         or die "Unable to copy file: $test->{file} - $!";
 
     ok($build->ACTION_contents);
@@ -119,7 +119,7 @@ sub teardown : Test(teardown) {
     my $file = $test->{file};
     my $build = $test->{build};
     
-    unlink($file) or die "Unable to remove file: $file - $!";
+    unlink("lib/$file") or die "Unable to remove file: lib/$file - $!";
     
     $build->notes('section_header' => '');
 }
