@@ -100,8 +100,11 @@ sub teardown : Test(teardown) {
     my $test = shift;
     
     my $file = $test->{file};
+    my $build = $test->{build};
     
     unlink($file) or die "Unable to remove file: $file - $!";
+    
+    $build->dispatch('realclean');
 };
 
 1;
