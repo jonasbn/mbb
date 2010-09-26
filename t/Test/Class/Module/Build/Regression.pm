@@ -48,7 +48,7 @@ sub do_create_meta : Test(7) {
     my $version = $test->{version};
     my $canonical_version = $test->{canonical};
     
-    ok($build->metafile('t/META.yml'));
+    ok($build->metafile('t/testMETA.yml'));
 
     ok($build->do_create_metafile);
 
@@ -76,8 +76,8 @@ sub create_mymeta : Test(8) {
     my $version = $test->{version};
     my $canonical_version = $test->{canonical};
 
-    ok($build->metafile('t/META.yml'));    
-    ok($build->mymetafile('t/MYMETA.yml'));
+    ok($build->metafile('t/testMETA.yml'));    
+    ok($build->mymetafile('t/testMYMETA.yml'));
 
     ok($build->create_mymeta());
 

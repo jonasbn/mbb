@@ -50,6 +50,8 @@ svn-commit\.tmp
 
 # Avoid project files
 \.komodoproject
+t/testMETA.yml
+t/testMYMETA.yml
 t/META.yml
 t/MYMETA.yml
 spikes
