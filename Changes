@@ -5,6 +5,18 @@ $Id$
 Project Change log:
 http://logiclab.jira.com/browse/MBB#selectedTab=com.atlassian.jira.plugin.system.project%3Achangelog-panel
 
+Release 0.02, 26.09.2010, bug fix release, update recommended
+
+- Changed inheritance [MBB-13]
+  http://logiclab.jira.com/browse/MBB-13
+
+- Issues with distribution generation [MBB-16]
+  http://logiclab.jira.com/browse/MBB-16
+
+- Addressed failing tests [MBB-14]
+  http://logiclab.jira.com/browse/MBB-14
+
+
 Release 0.01, 14.09.2010
 
 - Initial release
