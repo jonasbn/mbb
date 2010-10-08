@@ -55,3 +55,6 @@ t/testMYMETA.yml
 t/META.yml
 t/MYMETA.yml
 spikes
+
+# Avoid OSX specific files
+.DS_Store
