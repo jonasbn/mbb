@@ -6,7 +6,7 @@ use strict;
 use warnings;
 use Test::More;
 use Module::Build::YAML;
-
+use Test::MockObject::Extends;
 use FindBin;
 use lib "$FindBin::Bin/../t";
 
@@ -23,6 +23,10 @@ sub setup : Test(setup => 2) {
         dist_author  => 'jonasbn',
         dist_abstract => 'this is a dummy',
     ), 'calling constructor');
+
+	$build = Test::MockObject::Extends->new( $build );
+	
+	$build->set_true('_add_to_manifest');
 
     $test->{version} = $Module::Build::Bundle::VERSION;
     $test->{package} = ref $build;
