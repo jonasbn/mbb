@@ -14,7 +14,7 @@ use base qw(Module::Build);
 
 use constant EXTENDED_POD_LINK_VERSION => 5.12.0;
 
-our $VERSION = '0.02';
+our $VERSION = '0.04';
 
 #HACK: we need a writable copy for testing purposes
 our $myPERL_VERSION = $^V; 
@@ -153,6 +153,43 @@ sub get_metadata {
   $metadata->{configure_requires} = { "$package" => $VERSION };
   
   return $metadata;
+}
+
+
+#Lifed from Module::Build::Base
+sub do_create_metafile {
+  my $self = shift;
+  return if $self->{wrote_metadata};
+
+  my $p = $self->{properties};
+  my $metafile = $self->metafile;
+
+  unless ($p->{license}) {
+    $self->log_warn("No license specified, setting license = 'unknown'\n");
+    $p->{license} = 'unknown';
+  }
+  unless (exists $self->valid_licenses->{ $p->{license} }) {
+    die "Unknown license type '$p->{license}'";
+  }
+
+  # If we're in the distdir, the metafile may exist and be non-writable.
+  $self->delete_filetree($metafile);
+  $self->log_info("Creating $metafile\n");
+
+  # Since we're building ourself, we have to do some special stuff
+  # here: the ConfigData module is found in blib/lib.
+  local @INC = @INC;
+  if (($self->module_name || '') eq 'Module::Build') {
+    $self->depends_on('config_data');
+    push @INC, File::Spec->catdir($self->blib, 'lib');
+  }
+
+  if ($self->write_metafile($self->metafile,$self->get_metadata(fatal=>1))){
+    $self->{wrote_metadata} = 1;
+    $self->_add_to_manifest('MANIFEST', $metafile);
+  }
+
+  return 1;
 }
 
 1;

@@ -25,6 +25,7 @@ my $build = Module::Build->new(
         'Test::More'          => '0',       #test
         'Tie::IxHash'         => '0',
         'perl'                => '5.6.0',
+        'Test::MockObject::Extends' => '0', #test
     },
     meta_merge => {
         resources => {
