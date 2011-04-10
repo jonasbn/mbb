@@ -60,9 +60,9 @@ sub do_create_meta : Test(7) {
 
     my $meta = $yaml->read($build->metafile)->[0];
 
-    like($meta->{generated_by}, qr/\A$package version \d+\.\d+\z/, q[asserting 'generated_by']);
+    like($meta->{generated_by}, qr/\A$package version \d+\.\d+(?:,\s+\w+)*/, q[asserting 'generated_by']);
     
-    like($meta->{generated_by}, qr/\A$package version $version\z/, q[asserting 'generated_by']);
+    like($meta->{generated_by}, qr/\A$package version $version(?:,\s+\w+)*/, q[asserting 'generated_by']);
 
     ok(my $req = $meta->{configure_requires}, q[checking 'configure_requires']);
     
