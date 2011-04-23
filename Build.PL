@@ -14,6 +14,9 @@ my $build = Module::Build->new(
     dist_abstract => 'build assistance for Bundle and Task distributions',
     license       => 'artistic',
     create_readme => 1,
+    build_requires => {
+        'Module::Build' => '0',
+    },
     requires      => {
         'Carp'                => '0',
         'Cwd'                 => '0',
