@@ -14,7 +14,7 @@ use base qw(Module::Build);
 
 use constant EXTENDED_POD_LINK_VERSION => 5.12.0;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 #HACK: we need a writable copy for testing purposes
 our $myPERL_VERSION = $^V; 
