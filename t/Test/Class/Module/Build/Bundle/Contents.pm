@@ -40,6 +40,9 @@ sub contents : Test(3) {
 
     cp("t/$test->{file}", "lib/$test->{file}")
         or die "Unable to copy file: $test->{file} - $!";
+
+    #HACK: we cheat and pretend to be 5.10.1
+    $Module::Build::Bundle::myPERL_VERSION = 5.10.1;
     
     ok($build->ACTION_contents);
     
