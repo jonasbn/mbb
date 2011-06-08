@@ -13,6 +13,7 @@ my $build = Module::Build->new(
     module_name   => 'Module::Build::Bundle',
     dist_abstract => 'build assistance for Bundle and Task distributions',
     license       => 'artistic',
+    create_makefile_pl => 'traditional',
     create_readme => 1,
     build_requires => {
         'Module::Build' => '0',
