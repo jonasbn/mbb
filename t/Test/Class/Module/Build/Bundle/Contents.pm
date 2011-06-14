@@ -31,6 +31,15 @@ sub setup : Test(setup => 2) {
 
     $test->{build} = $build;
     $test->{file} = 'Dummy.pm';
+	$test->{temp_wd} = 'temp';
+	
+	#this is induced in the code
+	$build->notes('temp_wd' => $test->{temp_wd});
+
+	if (not -e $test->{temp_wd}) {
+		mkdir($test->{temp_wd})
+			or die "Unable to create temp directory $test->{temp_wd} for test: $!";
+	}
 };
 
 sub contents : Test(3) {
@@ -38,7 +47,7 @@ sub contents : Test(3) {
     
     my $build = $test->{build};
 
-    cp("t/$test->{file}", "lib/$test->{file}")
+    cp("t/$test->{file}", "$test->{temp_wd}/$test->{file}")
         or die "Unable to copy file: $test->{file} - $!";
 
     #HACK: we cheat and pretend to be 5.10.1
@@ -46,7 +55,9 @@ sub contents : Test(3) {
     
     ok($build->ACTION_contents);
     
-    open FIN, '<', "lib/$test->{file}" or die "Unable to open file: $!";
+    open FIN, '<', "$test->{temp_wd}/$test->{file}"
+		or die "Unable to open file: $!";
+		
     my $content = join '', <FIN>;
     close FIN;
     
@@ -61,15 +72,15 @@ sub extended : Test(3) {
     
     my $build = $test->{build};
 
-    cp("t/$test->{file}", "lib/$test->{file}")
-        or die "Unable to copy file: lib/$test->{file} - $!";
+    cp("t/$test->{file}", "$test->{temp_wd}/$test->{file}")
+        or die "Unable to copy file: $test->{temp_wd}/$test->{file} - $!";
     
     #HACK: we cheat and pretend to be 5.12.0
     $Module::Build::Bundle::myPERL_VERSION = 5.12.0;
     
     ok($build->ACTION_contents);
 
-    open FIN, '<', "lib/$test->{file}" or die "Unable to open file: $!";
+    open FIN, '<', "$test->{temp_wd}/$test->{file}" or die "Unable to open file: $!";
     my $content = join '', <FIN>;
     close FIN;
     
@@ -82,8 +93,8 @@ sub death_by_section_header : Test(1) {
     
     my $build = $test->{build};
 
-    cp("t/$test->{file}", "lib/$test->{file}")
-        or die "Unable to copy file: lib/$test->{file} - $!";
+    cp("t/$test->{file}", "$test->{temp_wd}/$test->{file}")
+        or die "Unable to copy file: $test->{temp_wd}/$test->{file} - $!";
 
     $build->notes('section_header' => 'TO DEATH');
         
@@ -107,7 +118,7 @@ sub section_header : Test(2) {
 
     $test->{file} = 'Dummy2.pm';
     
-    cp("t/$test->{file}", 'lib/Dummy2.pm')
+    cp("t/$test->{file}", "$test->{temp_wd}/$test->{file}")
         or die "Unable to copy file: $test->{file} - $!";
 
     ok($build->ACTION_contents);
@@ -122,8 +133,12 @@ sub teardown : Test(teardown) {
     my $file = $test->{file};
     my $build = $test->{build};
     
-    unlink("lib/$file") or die "Unable to remove file: lib/$file - $!";
+    unlink("$test->{temp_wd}/$file") 
+		or die "Unable to remove file: $test->{temp_wd}/$file - $!";
     
+	rmdir($test->{temp_wd})
+		or die "Unable to remove directory: $test->{temp_wd} - $!";
+
     $build->notes('section_header' => '');
 }
 

@@ -14,7 +14,7 @@ use base qw(Module::Build);
 
 use constant EXTENDED_POD_LINK_VERSION => 5.12.0;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 #HACK: we need a writable copy for testing purposes
 our $myPERL_VERSION = $^V; 
@@ -73,7 +73,10 @@ sub ACTION_contents {
     my @path = split /::/, $self->{properties}->{module_name}
         || $self->{properties}->{module_name};
 
-    my $file = $cwd.'/lib/'. (join '/', @path) .'.pm';
+	#HACK: induced from test suite
+	my $dir = $self->notes('temp_wd')?$self->notes('temp_wd'):'lib';
+	
+    my $file = (join '/', ($cwd, $dir, @path)) .'.pm';
     open(FIN, '+<', $file)
         or croak "Unable to open file: $file - $!";
         
