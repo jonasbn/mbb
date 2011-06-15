@@ -205,7 +205,7 @@ Module::Build::Bundle - subclass for supporting Tasks and Bundles
 
 =head1 VERSION
 
-This documentation describes version 0.06
+This documentation describes version 0.07
 
 =head1 SYNOPSIS
 
@@ -415,13 +415,17 @@ The distribution requires perl version from 5.6.0 and up.
 
 =head1 BUGS AND LIMITATIONS
 
-There are no known bugs or special limitations at this time, but I am sure there
-are plenty of scenarios is distribution packaging the module is not currently
-handling.
+Currently Module::Build::Bundle is not able to handle root based distributions
+meaning distribtions with a single Perl module located in the root directory
+instead of the lib structure.
 
-Currently the module only supports Bundle/Task distributions based on
-Module::Build. The implementation is based on a subclass of Module::Build, which
-can replace Module::Build (See: L</SYNOPSIS>).
+Apart from that there are no known special limitations or bugs at this time,
+but I am certain there are plenty of scenarios is distribution packaging the
+module is not currently handling.
+
+The module only supports Bundle/Task distributions based on L<Module::Build>.
+The implementation is based on a subclass of Module::Build, which can replace
+L<Module::Build> (See: L</SYNOPSIS>).
 
 =head1 SEE ALSO
 
