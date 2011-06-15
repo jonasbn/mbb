@@ -205,7 +205,7 @@ Module::Build::Bundle - subclass for supporting Tasks and Bundles
 
 =head1 VERSION
 
-This documentation describes version 0.06
+This documentation describes version 0.07
 
 =head1 SYNOPSIS
 
