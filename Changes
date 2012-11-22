@@ -5,31 +5,49 @@ $Id$
 Project Change log:
 http://logiclab.jira.com/browse/MBB#selectedTab=com.atlassian.jira.plugin.system.project%3Achangelog-panel
 
-Release 0.06, 06.05.2011, maintenance release, update not necessary
+Release 0.08, 2012.11.22, maintenance release
+
+- Attempt at address all the failing tests (307 fails against 177 passes at the time of writing) [MBB-31]
+  http://logiclab.jira.com/browse/MBB-31
+  
+
+Release 0.07, 2011.06.15, maintenance release, update not necessary
+
+- Addressed issue with test suite and permissions [MBB-28]
+  http://logiclab.jira.com/browse/MBB-28
+
+- Investigated create_makefile_pl [MBB-29]
+  http://logiclab.jira.com/browse/MBB-29
+
+- Described current limitation in POD in regard to root based distributions	[MBB-30]
+  http://logiclab.jira.com/browse/MBB-30
+
+
+Release 0.06, 2011.05.06, maintenance release, update not necessary
 
 - Addressed failing tests [MBB-25] tests should now pass under newer perls [MBB-26], when we cheat on
   the Perl version http://logiclab.jira.com/browse/MBB-25 and http://logiclab.jira.com/browse/MBB-26
 
 
-Release 0.05, 23.04.2011, bug fix release, update not necessary
+Release 0.05, 2011.04.23, bug fix release, update not necessary
 
 - Addressed failing tests [MBB-22] removing regression test suite, M::B is a  moving target
   http://logiclab.jira.com/browse/MBB-22
 
 
-Release 0.04, 23.11.2010, bug fix release, update recommended
+Release 0.04, 2010.11.23, bug fix release, update recommended
 
 - Addressed failing tests [MBB-18] missing listing of required file
   http://logiclab.jira.com/browse/MBB-18
 
 
-Release 0.03, 21.11.2010, bug fix release, update recommended
+Release 0.03, 2010.11.21, bug fix release, update recommended
 
 - Addressed failing tests [MBB-17]
   http://logiclab.jira.com/browse/MBB-17
 
 
-Release 0.02, 26.09.2010, bug fix release, update recommended
+Release 0.02, 2010.09.26, bug fix release, update recommended
 
 - Changed inheritance [MBB-13]
   http://logiclab.jira.com/browse/MBB-13
@@ -41,6 +59,6 @@ Release 0.02, 26.09.2010, bug fix release, update recommended
   http://logiclab.jira.com/browse/MBB-14
 
 
-Release 0.01, 14.09.2010
+Release 0.01, 2010.09.14
 
 - Initial release
