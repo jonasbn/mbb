@@ -205,7 +205,7 @@ Module::Build::Bundle - subclass for supporting Tasks and Bundles
 
 =head1 VERSION
 
-This documentation describes version 0.07
+This documentation describes version 0.08
 
 =head1 SYNOPSIS
 
@@ -243,8 +243,8 @@ This documentation describes version 0.07
 
 =item * Links to required/listed distributions, with or without versions
 
-=item * Links to specific versions of distributions for perl 5.12.0 if a version
-is specified
+=item * Links to specific versions of distributions for perl 5.12.0 or newer if a 
+version is specified
 
 =item * Inserts a POD section named CONTENTS or something specified by the
 caller
@@ -449,7 +449,7 @@ The motivation was driven by two things.
 
 =over
 
-=item * The joy of fooling around with Module::Build
+=item * The joy of fooling around with L<Module::Build|Module::Build>
 
 =item * The need for automating the documentation generation
 
@@ -483,7 +483,7 @@ but then I needed it for some other distributions, so I decided to separate it o
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2010 jonasbn, all rights reserved.
+Copyright 2010-2012 jonasbn, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
