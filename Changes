@@ -7,7 +7,7 @@ http://logiclab.jira.com/browse/MBB#selectedTab=com.atlassian.jira.plugin.system
 
 Release 0.08, 2012.11.22, maintenance release
 
-- Attempt at address all the failing tests (307 fails against 177 passes at the time of writing) [MBB-31]
+- Attempt at address all the failing tests (308 fails against 177 passes at the time of writing) [MBB-31]
   http://logiclab.jira.com/browse/MBB-31
   
 
