@@ -10,6 +10,8 @@ Release 0.08, 2012.11.22, maintenance release
 - Attempt at address all the failing tests (308 fails against 177 passes at the time of writing) [MBB-31]
   http://logiclab.jira.com/browse/MBB-31
   
+- Turned the dates in the changes file into ISO 8601 format
+  
 
 Release 0.07, 2011.06.15, maintenance release, update not necessary
 
