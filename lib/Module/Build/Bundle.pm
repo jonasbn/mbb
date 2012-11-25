@@ -77,11 +77,11 @@ sub ACTION_contents {
 	my $dir = $self->notes('temp_wd')?$self->notes('temp_wd'):'lib';
 	
     my $file = (join '/', ($cwd, $dir, @path)) .'.pm';
-    open(FIN, '+<', $file)
+    open my $fin, '+<', $file
         or croak "Unable to open file: $file - $!";
         
-    my $contents = join '', <FIN>;
-    close(FIN) or croak "Unable to close file: $file - $!";
+    my $contents = join '', <$fin>;
+    close $fin or croak "Unable to close file: $file - $!";
 
     my $rv = $contents =~ s/=head1\s*$section_header\s*.*=head1/$pod/s;
 
@@ -89,10 +89,10 @@ sub ACTION_contents {
         croak "No $section_header section replaced";
     }
 
-    open(FOUT, '>', $file)
+    open my $fout, '>', $file
         or croak "Unable to open file: $file - $!";
-    print FOUT $contents;
-    close(FOUT) or croak "Unable to close file: $file - $!";
+    print $fout $contents;
+    close $fout or croak "Unable to close file: $file - $!";
 
 	return 1;
 }
