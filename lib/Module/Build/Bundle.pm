@@ -2,7 +2,7 @@ package Module::Build::Bundle;
 
 # $Id$
 
-use 5.006; #$^V
+use 5.006;    #$^V
 use strict;
 use warnings;
 use Carp qw(croak);
@@ -17,47 +17,48 @@ use constant EXTENDED_POD_LINK_VERSION => 5.12.0;
 our $VERSION = '0.08';
 
 #HACK: we need a writable copy for testing purposes
-our $myPERL_VERSION = $^V; 
+## no critic (Variables::ProhibitPackageVars9
+our $myPERL_VERSION = $^V;
 
 sub ACTION_build {
     my $self = shift;
 
-	if (! $self->{'_completed_actions'}{'contents'}) {
-		$self->ACTION_contents();
-	}
-	
-	return Module::Build::Base::ACTION_build($self);
+    if ( !$self->{'_completed_actions'}{'contents'} ) {
+        $self->ACTION_contents();
+    }
+
+    return Module::Build::Base::ACTION_build($self);
 }
 
 sub ACTION_contents {
     my $self = shift;
-   
+
     #Fetching requirements from Build.PL
-    my @list = %{$self->requires()};
-    
+    my @list = %{ $self->requires() };
+
     my $section_header = $self->notes('section_header') || 'CONTENTS';
-    
+
     my $sorted = 'Tie::IxHash'->new(@list);
     $sorted->SortByKey();
-    
+
     my $pod = "=head1 $section_header\n\n=over\n\n";
-    foreach ($sorted->Keys) {
-        my ($module, $version) = $sorted->Shift();
+    foreach ( $sorted->Keys ) {
+        my ( $module, $version ) = $sorted->Shift();
 
         my $dist = $module;
         $dist =~ s/::/\-/g;
-        
+
         my $module_path = $module;
         $module_path =~ s[::][/]g;
         $module_path .= '.pm';
-        
+
         if ( $myPERL_VERSION ge EXTENDED_POD_LINK_VERSION ) {
             if ($version) {
-                $pod .= "=item * L<$module|$module>, ".
-                "L<$version|http://search.cpan.org/dist/$dist-$version/lib/$module_path>\n\n";
+                $pod .= "=item * L<$module|$module>, "
+                    . "L<$version|http://search.cpan.org/dist/$dist-$version/lib/$module_path>\n\n";
             } else {
                 $pod .= "=item * L<$module|$module>\n\n";
-            }        
+            }
         } else {
             if ($version) {
                 $pod .= "=item * L<$module|$module>, $version\n\n";
@@ -73,19 +74,19 @@ sub ACTION_contents {
     my @path = split /::/, $self->{properties}->{module_name}
         || $self->{properties}->{module_name};
 
-	#HACK: induced from test suite
-	my $dir = $self->notes('temp_wd')?$self->notes('temp_wd'):'lib';
-	
-    my $file = (join '/', ($cwd, $dir, @path)) .'.pm';
+    #HACK: induced from test suite
+    my $dir = $self->notes('temp_wd') ? $self->notes('temp_wd') : 'lib';
+
+    my $file = ( join '/', ( $cwd, $dir, @path ) ) . '.pm';
     open my $fin, '+<', $file
         or croak "Unable to open file: $file - $!";
-        
+
     my $contents = join '', <$fin>;
     close $fin or croak "Unable to close file: $file - $!";
 
     my $rv = $contents =~ s/=head1\s*$section_header\s*.*=head1/$pod/s;
 
-    if (! $rv) {
+    if ( !$rv ) {
         croak "No $section_header section replaced";
     }
 
@@ -94,105 +95,111 @@ sub ACTION_contents {
     print $fout $contents;
     close $fout or croak "Unable to close file: $file - $!";
 
-	return 1;
+    return 1;
 }
 
 #lifted from Module::Build::Base
 sub create_mymeta {
-  my ($self) = @_;
-  my $mymetafile = $self->mymetafile;
-  my $metafile = $self->metafile;
+    my ($self)     = @_;
+    my $mymetafile = $self->mymetafile;
+    my $metafile   = $self->metafile;
 
-  # cleanup
-  if ( $self->delete_filetree($mymetafile) ) {
-    $self->log_verbose("Removed previous '$mymetafile'\n");
-  }
-  $self->log_info("Creating new '$mymetafile' with configuration results\n");
-
-  # use old meta and update prereqs, if possible
-  my $mymeta;
-  if ( -f $metafile ) {
-    $mymeta = eval { $self->read_metafile( $self->metafile ) };
-  }
-  # if we read META OK, just update it
-  if ( defined $mymeta ) {
-    my $prereqs = $self->_normalize_prereqs;
-    for my $t ( keys %$prereqs ) {
-        $mymeta->{$t} = $prereqs->{$t};
+    # cleanup
+    if ( $self->delete_filetree($mymetafile) ) {
+        $self->log_verbose("Removed previous '$mymetafile'\n");
     }
-  }
-  # but generate from scratch, ignoring errors if META doesn't exist
-  else {
-    $mymeta = $self->get_metadata( fatal => 0 );
-  }
+    $self->log_info(
+        "Creating new '$mymetafile' with configuration results\n");
 
-  my $package = ref $self;
-  
-  # MYMETA is always static
-  $mymeta->{dynamic_config} = 0;
-  # Note which M::B created it
-  #JONASBN: changed from originally lifted code
-  $mymeta->{generated_by}
-    = "$package version $VERSION";
+    # use old meta and update prereqs, if possible
+    my $mymeta;
+    if ( -f $metafile ) {
+        $mymeta = eval { $self->read_metafile( $self->metafile ) };
+    }
 
-  $self->write_metafile( $mymetafile, $mymeta );
-  return 1;
+    # if we read META OK, just update it
+    if ( defined $mymeta ) {
+        my $prereqs = $self->_normalize_prereqs;
+        for my $t ( keys %$prereqs ) {
+            $mymeta->{$t} = $prereqs->{$t};
+        }
+    }
+
+    # but generate from scratch, ignoring errors if META doesn't exist
+    else {
+        $mymeta = $self->get_metadata( fatal => 0 );
+    }
+
+    my $package = ref $self;
+
+    # MYMETA is always static
+    $mymeta->{dynamic_config} = 0;
+
+    # Note which M::B created it
+    #JONASBN: changed from originally lifted code
+    $mymeta->{generated_by} = "$package version $VERSION";
+
+    $self->write_metafile( $mymetafile, $mymeta );
+    return 1;
 }
 
 #lifted from Module::Build::Base
 sub get_metadata {
-  my ($self, %args) = @_;
+    my ( $self, %args ) = @_;
 
-  my $metadata = {};
-  $self->prepare_metadata( $metadata, undef, \%args );
+    my $metadata = {};
+    $self->prepare_metadata( $metadata, undef, \%args );
 
-  my $package = ref $self;
+    my $package = ref $self;
 
-  #JONASBN: changed from originally lifted code  
-  $metadata->{generated_by}
-    = "$package version $VERSION";
+    #JONASBN: changed from originally lifted code
+    $metadata->{generated_by} = "$package version $VERSION";
 
-  #JONASBN: changed from originally lifted code
-  $metadata->{configure_requires} = { "$package" => $VERSION };
-  
-  return $metadata;
+    #JONASBN: changed from originally lifted code
+    $metadata->{configure_requires} = { "$package" => $VERSION };
+
+    return $metadata;
 }
-
 
 #Lifed from Module::Build::Base
 sub do_create_metafile {
-  my $self = shift;
-  return if $self->{wrote_metadata};
+    my $self = shift;
+    return if $self->{wrote_metadata};
 
-  my $p = $self->{properties};
-  my $metafile = $self->metafile;
+    my $p        = $self->{properties};
+    my $metafile = $self->metafile;
 
-  unless ($p->{license}) {
-    $self->log_warn("No license specified, setting license = 'unknown'\n");
-    $p->{license} = 'unknown';
-  }
-  unless (exists $self->valid_licenses->{ $p->{license} }) {
-    die "Unknown license type '$p->{license}'";
-  }
+    unless ( $p->{license} ) {
+        $self->log_warn(
+            "No license specified, setting license = 'unknown'\n");
+        $p->{license} = 'unknown';
+    }
+    unless ( exists $self->valid_licenses->{ $p->{license} } ) {
+        die "Unknown license type '$p->{license}'";
+    }
 
-  # If we're in the distdir, the metafile may exist and be non-writable.
-  $self->delete_filetree($metafile);
-  $self->log_info("Creating $metafile\n");
+    # If we're in the distdir, the metafile may exist and be non-writable.
+    $self->delete_filetree($metafile);
+    $self->log_info("Creating $metafile\n");
 
-  # Since we're building ourself, we have to do some special stuff
-  # here: the ConfigData module is found in blib/lib.
-  local @INC = @INC;
-  if (($self->module_name || '') eq 'Module::Build') {
-    $self->depends_on('config_data');
-    push @INC, File::Spec->catdir($self->blib, 'lib');
-  }
+    # Since we're building ourself, we have to do some special stuff
+    # here: the ConfigData module is found in blib/lib.
+    local @INC = @INC;
+    if ( ( $self->module_name || '' ) eq 'Module::Build' ) {
+        $self->depends_on('config_data');
+        push @INC, File::Spec->catdir( $self->blib, 'lib' );
+    }
 
-  if ($self->write_metafile($self->metafile,$self->get_metadata(fatal=>1))){
-    $self->{wrote_metadata} = 1;
-    $self->_add_to_manifest('MANIFEST', $metafile);
-  }
+    if ($self->write_metafile(
+            $self->metafile, $self->get_metadata( fatal => 1 )
+        )
+        )
+    {
+        $self->{wrote_metadata} = 1;
+        $self->_add_to_manifest( 'MANIFEST', $metafile );
+    }
 
-  return 1;
+    return 1;
 }
 
 1;
