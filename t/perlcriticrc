@@ -25,3 +25,7 @@ exclude_functions = print
 [-Documentation::RequirePodLinksIncludeText]
 [Variables::ProhibitPunctuationVars]
 allow = $@ $!
+
+#I like constants
+#https://logiclab.jira.com/wiki/display/OPEN/Perl-Critic-Policy-ValuesAndExpressions-ProhibitConstantPragma
+[-ValuesAndExpressions::ProhibitConstantPragma]
