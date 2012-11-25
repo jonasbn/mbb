@@ -17,7 +17,7 @@ use constant EXTENDED_POD_LINK_VERSION => 5.12.0;
 our $VERSION = '0.08';
 
 #HACK: we need a writable copy for testing purposes
-## no critic (Variables::ProhibitPackageVars9
+## no critic qw(Variables::ProhibitPackageVars)
 our $myPERL_VERSION = $^V;
 
 sub ACTION_build {
