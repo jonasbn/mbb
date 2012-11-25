@@ -20,7 +20,6 @@ allow_leading_tabs = 0
 functions = :builtins
 exclude_functions = print
 
-[-InputOutput::RequireBracedFileHandleWithPrint]
 
 [-Documentation::RequirePodLinksIncludeText]
 [Variables::ProhibitPunctuationVars]
@@ -30,4 +29,20 @@ allow = $@ $!
 #https://logiclab.jira.com/wiki/display/OPEN/Perl-Critic-Policy-ValuesAndExpressions-ProhibitConstantPragma
 [-ValuesAndExpressions::ProhibitConstantPragma]
 
+#I don't use Emacs
+[-Editor::RequireEmacsFileVariables]
+
+# TODO
+
+[-InputOutput::RequireBracedFileHandleWithPrint]
+
 [-ErrorHandling::RequireUseOfExceptions]
+
+[-RegularExpressions::RequireExtendedFormatting]
+
+[-RegularExpressions::RequireDotMatchAnything]
+
+[-RegularExpressions::RequireLineBoundaryMatching]
+
+[-InputOutput::ProhibitJoinedReadline] 
+
