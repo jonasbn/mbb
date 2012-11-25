@@ -175,7 +175,7 @@ sub do_create_metafile {
         $p->{license} = 'unknown';
     }
     unless ( exists $self->valid_licenses->{ $p->{license} } ) {
-        die "Unknown license type '$p->{license}'";
+        croak "Unknown license type '$p->{license}'";
     }
 
     # If we're in the distdir, the metafile may exist and be non-writable.
