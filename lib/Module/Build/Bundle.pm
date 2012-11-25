@@ -435,6 +435,29 @@ The module only supports Bundle/Task distributions based on L<Module::Build>.
 The implementation is based on a subclass of Module::Build, which can replace
 L<Module::Build> (See: L</SYNOPSIS>).
 
+=head1 BUG REPORTING
+
+=head1 TEST AND QUALITY
+
+=head2 TEST COVERAGE
+
+----------------------------------- ------ ------ ------ ------ ------ ------
+File                                  stmt   bran   cond    sub   time  total
+----------------------------------- ------ ------ ------ ------ ------ ------
+lib/Module/Build/Bundle.pm            73.7   50.0   57.1   85.7  100.0   69.0
+Total                                 73.7   50.0   57.1   85.7  100.0   69.0
+----------------------------------- ------ ------ ------ ------ ------ ------
+
+The above coverage report is based on release 0.08
+
+=head1 QUALITY AND CODING STANDARD
+
+=head1 DEVELOPMENT
+
+=head1 TODO
+
+Please see: L<https://logiclab.jira.com/browse/MBB#selectedTab=com.atlassian.jira.plugin.system.project%3Aroadmap-panel>
+
 =head1 SEE ALSO
 
 =over
@@ -447,7 +470,7 @@ L<Module::Build> (See: L</SYNOPSIS>).
 
 =item * L<CPAN|CPAN>
 
-=item * L<http://cpansearch.perl.org/src/ANDK/CPAN-1.9402/lib/CPAN/Bundle.pm>
+=item * L<CPAN::Bundle|http://cpansearch.perl.org/src/ANDK/CPAN-1.9402/lib/CPAN/Bundle.pm>
 
 =back
 
