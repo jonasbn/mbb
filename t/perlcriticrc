@@ -1,7 +1,7 @@
 
 # $Id: perlcriticrc 386 2009-01-08 13:50:49Z jonasbn $
 
-severity = 1
+severity = 3
 verbose  = 8
 
 #------------------------------------------------------------------------------
@@ -46,3 +46,12 @@ allow = $@ $!
 
 [-InputOutput::ProhibitJoinedReadline] 
 
+[-Variables::ProhibitPunctuationVars]
+
+[-ControlStructures::ProhibitUnlessBlocks]
+
+[-Documentation::RequirePodSections]
+
+[-ValuesAndExpressions::ProhibitEmptyQuotes]
+
+#Variables::ProhibitPunctuationVars needs to be addressed in local disabling
