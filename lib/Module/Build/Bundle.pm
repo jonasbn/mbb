@@ -77,6 +77,7 @@ sub ACTION_contents {
     #HACK: induced from test suite
     my $dir = $self->notes('temp_wd') ? $self->notes('temp_wd') : 'lib';
 
+   ## no critic qw(ValuesAndExpressions::ProhibitNoisyQuotes)
     my $file = ( join '/', ( $cwd, $dir, @path ) ) . '.pm';
     open my $fin, '+<', $file
         or croak "Unable to open file: $file - $!";
