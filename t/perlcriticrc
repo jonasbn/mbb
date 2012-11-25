@@ -29,3 +29,5 @@ allow = $@ $!
 #I like constants
 #https://logiclab.jira.com/wiki/display/OPEN/Perl-Critic-Policy-ValuesAndExpressions-ProhibitConstantPragma
 [-ValuesAndExpressions::ProhibitConstantPragma]
+
+[-ErrorHandling::RequireUseOfExceptions]
