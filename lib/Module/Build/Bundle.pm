@@ -17,7 +17,7 @@ use constant EXTENDED_POD_LINK_VERSION => 5.12.0;
 our $VERSION = '0.08';
 
 #HACK: we need a writable copy for testing purposes
-## no critic qw(Variables::ProhibitPackageVars)
+## no critic qw(Variables::ProhibitPackageVars Variables::ProhibitPunctuationVars)
 our $myPERL_VERSION = $^V;
 
 sub ACTION_build {
@@ -120,7 +120,7 @@ sub create_mymeta {
     # if we read META OK, just update it
     if ( defined $mymeta ) {
         my $prereqs = $self->_normalize_prereqs;
-        for my $t ( keys %$prereqs ) {
+        for my $t ( keys %{$prereqs} ) {
             $mymeta->{$t} = $prereqs->{$t};
         }
     }
