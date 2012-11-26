@@ -57,7 +57,7 @@ sub contents : Test(3) {
         #HACK: we cheat and pretend to be 5.10.1
         $Module::Build::Bundle::myPERL_VERSION = 5.10.1;
     
-        ok($build->ACTION_contents);
+        ok($build->ACTION_contents, 'executing ACTION_contents');
     
         open FIN, '<', "$test->{temp_wd}/$test->{file}"
             or die "Unable to open file: $!";
@@ -65,8 +65,8 @@ sub contents : Test(3) {
         my $content = join '', <FIN>;
         close FIN;
     
-        like($content, qr/=item \* L<Module::Build\|Module::Build>/s);
-        like($content, qr/=item \* L<Text::Soundex\|Text::Soundex>, 2\.00/);
+        like($content, qr/=item \* L<Module::Build\|Module::Build>/s, 'asserting Module::Build item');
+        like($content, qr/=item \* L<Text::Soundex\|Text::Soundex>, 2\.00/, 'asserting Text::Soundex item');
 
         $test->{build} = $build;
     }
@@ -86,14 +86,14 @@ sub extended : Test(3) {
         #HACK: we cheat and pretend to be 5.12.0
         $Module::Build::Bundle::myPERL_VERSION = 5.12.0;
     
-        ok($build->ACTION_contents);
+        ok($build->ACTION_contents, 'executing ACTION_contents');
 
         open FIN, '<', "$test->{temp_wd}/$test->{file}" or die "Unable to open file: $!";
         my $content = join '', <FIN>;
         close FIN;
     
-        like($content, qr/=item \* L<Module::Build\|Module::Build>/s);
-        like($content, qr[=item \* L<Text::Soundex\|Text::Soundex>, L<2\.00\|http://search.cpan.org/dist/Text-Soundex-2\.00/lib/Text/Soundex.pm>]);
+        like($content, qr/=item \* L<Module::Build\|Module::Build>/s, 'asserting Module::Build item');
+        like($content, qr[=item \* L<Text::Soundex\|Text::Soundex>, L<2\.00\|http://search.cpan.org/dist/Text-Soundex-2\.00/lib/Text/Soundex.pm>], 'asserting Text::Soundex item');
     }
 };
 
@@ -137,7 +137,7 @@ sub section_header : Test(2) {
         cp("t/$test->{file}", "$test->{temp_wd}/$test->{file}")
             or die "Unable to copy file: $test->{file} - $!";
 
-        ok($build->ACTION_contents);
+        ok($build->ACTION_contents, 'executing ACTION_contents');
     
         $test->{build} = $build;
     }
