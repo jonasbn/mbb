@@ -446,6 +446,8 @@ future.
 
 =item * L<http://cpansearch.perl.org/src/ANDK/CPAN-1.9402/lib/CPAN/Bundle.pm>
 
+=item * L<https://logiclab.jira.com/wiki/display/OPEN/Module-Build-Bundle>
+
 =back
 
 =head1 MOTIVATION
