@@ -427,6 +427,11 @@ The module only supports Bundle/Task distributions based on L<Module::Build>.
 The implementation is based on a subclass of L<Module::Build>, which can replace
 L<Module::Build> in your F<Build.PL> (See: L</SYNOPSIS>).
 
+As described previously in the documentation a section of documentation can only
+replaced. A section with the generated contents cannot be added with out a
+placeholder in the form of designated section title. This might be changed in the
+future.
+
 =head1 SEE ALSO
 
 =over
