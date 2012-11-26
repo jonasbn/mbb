@@ -416,7 +416,7 @@ The distribution requires perl version from 5.6.0 and up.
 =head1 BUGS AND LIMITATIONS
 
 Currently Module::Build::Bundle is not able to handle root based distributions
-meaning distribtions with a single Perl module located in the root directory
+meaning distributions with a single Perl module located in the root directory
 instead of the lib structure.
 
 Apart from that there are no known special limitations or bugs at this time,
