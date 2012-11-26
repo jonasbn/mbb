@@ -424,8 +424,8 @@ but I am certain there are plenty of scenarios is distribution packaging the
 module is not currently handling.
 
 The module only supports Bundle/Task distributions based on L<Module::Build>.
-The implementation is based on a subclass of Module::Build, which can replace
-L<Module::Build> (See: L</SYNOPSIS>).
+The implementation is based on a subclass of L<Module::Build>, which can replace
+L<Module::Build> in your F<Build.PL> (See: L</SYNOPSIS>).
 
 =head1 SEE ALSO
 
