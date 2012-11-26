@@ -284,7 +284,7 @@ section_header note.
 
 The section of course has to be present.
 
-Based on your version of perl and you F<Build.PL> requirements, the links will
+Based on your version of perl and your F<Build.PL> requirements, the links will
 be rendered in the following formats:
 
 Basic:
