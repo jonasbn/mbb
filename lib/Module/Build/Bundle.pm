@@ -252,8 +252,8 @@ caller
 =back
 
 This module adds a very basic action for propagating a requirements list from
-a F<Build.PL> file's requires section to the a POD section in the distribution
-targetted.
+a F<Build.PL> file's requires section to the a POD section in a designated
+distribution.
 
 =head1 SUBROUTINES/METHODS
 
