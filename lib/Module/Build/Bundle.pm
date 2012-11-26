@@ -260,8 +260,8 @@ caller
 =back
 
 This module adds a very basic action for propagating a requirements list from
-a F<Build.PL> file's requires section to the a POD section in the distribution
-targetted.
+a F<Build.PL> file's requires section to the a POD section in a designated
+distribution.
 
 =head1 SUBROUTINES/METHODS
 
@@ -292,7 +292,7 @@ section_header note.
 
 The section of course has to be present.
 
-Based on your version of perl and you F<Build.PL> requirements, the links will
+Based on your version of perl and your F<Build.PL> requirements, the links will
 be rendered in the following formats:
 
 Basic:
@@ -424,7 +424,7 @@ The distribution requires perl version from 5.6.0 and up.
 =head1 BUGS AND LIMITATIONS
 
 Currently Module::Build::Bundle is not able to handle root based distributions
-meaning distribtions with a single Perl module located in the root directory
+meaning distributions with a single Perl module located in the root directory
 instead of the lib structure.
 
 Apart from that there are no known special limitations or bugs at this time,
@@ -432,8 +432,13 @@ but I am certain there are plenty of scenarios is distribution packaging the
 module is not currently handling.
 
 The module only supports Bundle/Task distributions based on L<Module::Build>.
-The implementation is based on a subclass of Module::Build, which can replace
-L<Module::Build> (See: L</SYNOPSIS>).
+The implementation is based on a subclass of L<Module::Build>, which can replace
+L<Module::Build> in your F<Build.PL> (See: L</SYNOPSIS>).
+
+As described previously in the documentation a section of documentation can only
+replaced. A section with the generated contents cannot be added with out a
+placeholder in the form of designated section title. This might be changed in the
+future.
 
 =head1 BUG REPORTING
 
@@ -471,6 +476,8 @@ Please see: L<https://logiclab.jira.com/browse/MBB#selectedTab=com.atlassian.jir
 =item * L<CPAN|CPAN>
 
 =item * L<CPAN::Bundle|http://cpansearch.perl.org/src/ANDK/CPAN-1.9402/lib/CPAN/Bundle.pm>
+
+=item * L<https://logiclab.jira.com/wiki/display/OPEN/Module-Build-Bundle>
 
 =back
 
