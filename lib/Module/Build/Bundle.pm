@@ -490,7 +490,7 @@ but then I needed it for some other distributions, so I decided to separate it o
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2010 jonasbn, all rights reserved.
+Copyright 2010-2012 jonasbn, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
