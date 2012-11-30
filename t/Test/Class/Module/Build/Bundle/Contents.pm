@@ -7,6 +7,7 @@ use warnings;
 use Test::More;
 use File::Copy qw(cp);
 use Test::Exception;
+use Cwd;
 
 use base qw(Test::Class);
 
@@ -36,7 +37,9 @@ sub setup : Test(setup => 2) {
 	#this is induced in the code
 	$build->notes('temp_wd' => $test->{temp_wd});
 
-	if (not -e $test->{temp_wd}) {
+    my $dir = getcwd;
+    
+	if (not -e $test->{temp_wd} && -w $dir) {
         
         mkdir($test->{temp_wd})
             or die "Unable to create temp directory $test->{temp_wd} for test: $!";
@@ -49,7 +52,7 @@ sub contents : Test(3) {
     my $build = $test->{build};
     
     SKIP: {
-        skip "file system is not cooperative", 3, if (! -w $test->{temp_wd});
+        skip "file system is not cooperative", 3, if (! -e $test->{temp_wd} && -w _);
     
         cp("t/$test->{file}", "$test->{temp_wd}/$test->{file}")
             or die "Unable to copy file: $test->{file} - $!";
@@ -78,7 +81,7 @@ sub extended : Test(3) {
     my $build = $test->{build};
 
     SKIP: {
-        skip "file system is not cooperative", 3, if (! -w $test->{temp_wd});
+        skip "file system is not cooperative", 3, if (! -e $test->{temp_wd} && -w _);
     
         cp("t/$test->{file}", "$test->{temp_wd}/$test->{file}")
             or die "Unable to copy file: $test->{file} - $!";
@@ -103,7 +106,7 @@ sub death_by_section_header : Test(1) {
     my $build = $test->{build};
 
     SKIP: {
-        skip "file system is not cooperative", 1, if (! -w $test->{temp_wd});
+        skip "file system is not cooperative", 1, if (! -e $test->{temp_wd} && -w _);
     
         cp("t/$test->{file}", "$test->{temp_wd}/$test->{file}")
             or die "Unable to copy file: $test->{temp_wd}/$test->{file} - $!";
@@ -132,7 +135,7 @@ sub section_header : Test(2) {
     $test->{file} = 'Dummy2.pm';
     
     SKIP: {
-        skip "file system is not cooperative", 1, if (! -w $test->{temp_wd});
+        skip "file system is not cooperative", 1, if (! -e $test->{temp_wd} && -w _);
     
         cp("t/$test->{file}", "$test->{temp_wd}/$test->{file}")
             or die "Unable to copy file: $test->{file} - $!";
