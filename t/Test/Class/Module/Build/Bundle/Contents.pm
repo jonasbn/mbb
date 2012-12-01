@@ -82,46 +82,42 @@ sub contents : Test(3) {
     }
 };
 
-sub extended : Test(3) {
+sub extended : Test(4) {
     my $test = shift;
     
     my $build = $test->{build};
 
     SKIP: {
-        skip "file system is not cooperative", 3, $test->{unfriendly_fs};
+        skip "file system is not cooperative", 4, $test->{unfriendly_fs};
     
-        my $content;
-        unless ($test->{unfriendly_fs}) {
-            cp("t/$test->{file}", "$test->{temp_wd}/$test->{file}")
-                or die "Unable to copy file: $test->{file} - $!";
+        ok(cp("t/$test->{file}", "$test->{temp_wd}/$test->{file}"), 'Copying test file'
+                or diag ("Unable to copy file: $test->{file} - $!"));
     
-            #HACK: we cheat and pretend to be 5.12.0
-            $Module::Build::Bundle::myPERL_VERSION = 5.12.0;
+        #HACK: we cheat and pretend to be 5.12.0
+        $Module::Build::Bundle::myPERL_VERSION = 5.12.0;
     
-            ok($build->ACTION_contents, 'executing ACTION_contents');
+        ok($build->ACTION_contents, 'executing ACTION_contents');
 
-            open FIN, '<', "$test->{temp_wd}/$test->{file}" or die "Unable to open file: $!";
-            $content = join '', <FIN>;
-            close FIN;
-        }
+        open FIN, '<', "$test->{temp_wd}/$test->{file}"
+            or die "Unable to open file: $!";
+        my $content = join '', <FIN>;
+        close FIN;
         
         like($content, qr/=item \* L<Module::Build\|Module::Build>/s, 'asserting Module::Build item');
         like($content, qr[=item \* L<Text::Soundex\|Text::Soundex>, L<2\.00\|http://search.cpan.org/dist/Text-Soundex-2\.00/lib/Text/Soundex.pm>], 'asserting Text::Soundex item');
     }
 };
 
-sub death_by_section_header : Test(1) {
+sub death_by_section_header : Test(2) {
     my $test = shift;
     
     my $build = $test->{build};
 
     SKIP: {
-        skip "file system is not cooperative", 1, $test->{unfriendly_fs};
+        skip "file system is not cooperative", 2, $test->{unfriendly_fs};
     
-        unless ($test->{unfriendly_fs}) {
-            cp("t/$test->{file}", "$test->{temp_wd}/$test->{file}")
-                or die "Unable to copy file: $test->{temp_wd}/$test->{file} - $!";
-        }
+        ok(cp("t/$test->{file}", "$test->{temp_wd}/$test->{file}"), 'Copying test file'
+                or diag("Unable to copy file: $test->{temp_wd}/$test->{file} - $!"));
         
         $build->notes('section_header' => 'TO DEATH');
         
@@ -129,7 +125,7 @@ sub death_by_section_header : Test(1) {
     }
 };
 
-sub section_header : Test(2) {
+sub section_header : Test(3) {
     my $test = shift;
 
     ok(my $build = Module::Build::Bundle->new(
@@ -147,12 +143,10 @@ sub section_header : Test(2) {
     $test->{file} = 'Dummy2.pm';
     
     SKIP: {
-        skip "file system is not cooperative", 1, $test->{unfriendly_fs};
+        skip "file system is not cooperative", 2, $test->{unfriendly_fs};
     
-        unless ($test->{unfriendly_fs}) {
-            cp("t/$test->{file}", "$test->{temp_wd}/$test->{file}")
-                or die "Unable to copy file: $test->{file} - $!";
-        }
+        ok(cp("t/$test->{file}", "$test->{temp_wd}/$test->{file}"), 'Copying test file'
+                or diag ("Unable to copy file: $test->{file} - $!"));
 
         ok($build->ACTION_contents, 'executing ACTION_contents');
     
