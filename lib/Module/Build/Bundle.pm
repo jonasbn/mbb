@@ -9,7 +9,7 @@ use Carp qw(croak);
 use Cwd qw(getcwd);
 use Tie::IxHash;
 use English qw( -no_match_vars );
-
+use File::Slurp; #read_file
 use base qw(Module::Build);
 
 use constant EXTENDED_POD_LINK_VERSION => 5.12.0;
@@ -79,12 +79,9 @@ sub ACTION_contents {
 
    ## no critic qw(ValuesAndExpressions::ProhibitNoisyQuotes)
     my $file = ( join '/', ( $cwd, $dir, @path ) ) . '.pm';
-    open my $fin, '+<', $file
-        or croak "Unable to open file: $file - $!";
 
-    my $contents = join '', <$fin>;
-    close $fin or croak "Unable to close file: $file - $!";
-
+    my $contents = read_file( $file );
+    
     my $rv = $contents =~ s/=head1\s*$section_header\s*.*=head1/$pod/s;
 
     if ( !$rv ) {

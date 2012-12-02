@@ -32,6 +32,9 @@ allow = $@ $!
 #I don't use Emacs
 [-Editor::RequireEmacsFileVariables]
 
+#We subclass Module::Build so this is required
+[-NamingConventions::Capitalization]
+
 # TODO
 
 [-InputOutput::RequireBracedFileHandleWithPrint]
@@ -44,7 +47,7 @@ allow = $@ $!
 
 [-RegularExpressions::RequireLineBoundaryMatching]
 
-[-InputOutput::ProhibitJoinedReadline] 
+[-RegularExpressions::ProhibitUnusualDelimiters] 
 
 [-Variables::ProhibitPunctuationVars]
 
@@ -55,3 +58,7 @@ allow = $@ $!
 [-ValuesAndExpressions::ProhibitEmptyQuotes]
 
 #Variables::ProhibitPunctuationVars needs to be addressed in local disabling
+
+[-Documentation::ProhibitVerbatimMarkup]
+
+[-Compatibility::PodMinimumVersion]

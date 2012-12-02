@@ -8,6 +8,7 @@ use Test::More;
 use File::Copy qw(cp);
 use Test::Exception;
 use File::Tempdir;
+use File::Slurp; #read_file
 
 use base qw(Test::Class);
 
@@ -48,13 +49,13 @@ sub setup : Test(setup => 2) {
     }
 };
 
-sub contents : Test(3) {
+sub contents : Test(4) {
     my $test = shift;
     
     my $build = $test->{build};
     
     SKIP: {
-        skip "file system is not cooperative", 3, $test->{unfriendly_fs};
+        skip "file system is not cooperative", 4, $test->{unfriendly_fs};
     
         unless ($test->{unfriendly_fs}) {
             cp("t/$test->{file}", "$test->{temp_wd}/$test->{file}")
@@ -66,14 +67,7 @@ sub contents : Test(3) {
     
         ok($build->ACTION_contents, 'executing ACTION_contents');
     
-        my $content;
-        unless ($test->{unfriendly_fs}) {
-            open FIN, '<', "$test->{temp_wd}/$test->{file}"
-                or die "Unable to open file: $!";
-		
-            $content = join '', <FIN>;
-            close FIN;
-        }
+        ok(my $content = read_file( "$test->{temp_wd}/$test->{file}" ), 'reading file contents');
     
         like($content, qr/=item \* L<Module::Build\|Module::Build>/s, 'asserting Module::Build item');
         like($content, qr/=item \* L<Text::Soundex\|Text::Soundex>, 2\.00/, 'asserting Text::Soundex item');
@@ -82,13 +76,13 @@ sub contents : Test(3) {
     }
 };
 
-sub extended : Test(4) {
+sub extended : Test(5) {
     my $test = shift;
     
     my $build = $test->{build};
 
     SKIP: {
-        skip "file system is not cooperative", 4, $test->{unfriendly_fs};
+        skip "file system is not cooperative", 5, $test->{unfriendly_fs};
     
         ok(cp("t/$test->{file}", "$test->{temp_wd}/$test->{file}"), 'Copying test file'
                 or diag ("Unable to copy file: $test->{file} - $!"));
@@ -98,10 +92,7 @@ sub extended : Test(4) {
     
         ok($build->ACTION_contents, 'executing ACTION_contents');
 
-        open FIN, '<', "$test->{temp_wd}/$test->{file}"
-            or die "Unable to open file: $!";
-        my $content = join '', <FIN>;
-        close FIN;
+        ok(my $content = read_file( "$test->{temp_wd}/$test->{file}" ), 'reading file contents');
         
         like($content, qr/=item \* L<Module::Build\|Module::Build>/s, 'asserting Module::Build item');
         like($content, qr[=item \* L<Text::Soundex\|Text::Soundex>, L<2\.00\|http://search.cpan.org/dist/Text-Soundex-2\.00/lib/Text/Soundex.pm>], 'asserting Text::Soundex item');
