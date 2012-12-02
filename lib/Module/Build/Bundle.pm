@@ -114,7 +114,7 @@ sub create_mymeta {
 
     # use old meta and update prereqs, if possible
     my $mymeta;
-    if ( -f $metafile ) {
+    if ( -e $metafile ) {
         $mymeta = eval { $self->read_metafile( $self->metafile ) };
     }
 
