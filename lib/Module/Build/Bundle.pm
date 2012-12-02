@@ -168,6 +168,7 @@ sub do_create_metafile {
     return if $self->{wrote_metadata};
 
     my $p        = $self->{properties};
+    #JONASBN: changed from originally lifted code
     my $metafile = $self->metafile;
 
     unless ( $p->{license} ) {
@@ -364,6 +365,14 @@ For Module::Build::Bundle:
     configure_requires:
         Module::Build::Bundle: 0.01
     generated_by: 'Module::Build::Bundle version 0.01'
+
+=head2 do_create_metafile
+
+This method has been lifted from L<Module::Build::Base|Module::Build::Base> and
+altered.
+
+The method was overwritten to be more testable. The method created the relevant
+META file.
 
 =head1 DIAGNOSTICS
 
