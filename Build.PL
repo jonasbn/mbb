@@ -23,6 +23,7 @@ my $build = Module::Build->new(
         'Cwd'                 => '0',
         'English'             => '0',
         'File::Copy'          => '0',       #test
+        'File::Slurp'         => '0',
         'FindBin'             => '0',       #test
         'Module::Build::YAML' => '0',       #test
         'Test::Class'         => '0',       #test
