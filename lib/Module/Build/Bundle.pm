@@ -523,6 +523,8 @@ but then I needed it for some other distributions, so I decided to separate it o
 
 =item * The L<Module::Build> developers
 
+=item * Lars Dɪᴇᴄᴋᴏᴡ (DAXIM) for reporting RT:83754, resulting in release 0.11
+
 =back
 
 =head1 AUTHOR
