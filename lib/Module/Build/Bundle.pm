@@ -9,7 +9,7 @@ use Carp qw(croak);
 use Cwd qw(getcwd);
 use Tie::IxHash;
 use English qw( -no_match_vars );
-use File::Slurp; #read_file
+use File::Slurp;    #read_file
 use base qw(Module::Build);
 
 use constant EXTENDED_POD_LINK_VERSION => 5.12.0;
@@ -77,28 +77,28 @@ sub ACTION_contents {
     #HACK: induced from test suite
     my $dir = $self->notes('temp_wd') ? $self->notes('temp_wd') : 'blib/lib';
 
-   ## no critic qw(ValuesAndExpressions::ProhibitNoisyQuotes)
+    ## no critic qw(ValuesAndExpressions::ProhibitNoisyQuotes)
     my $file = ( join '/', ( $cwd, $dir, @path ) ) . '.pm';
 
-    my $contents = read_file( $file );
-    
+    my $contents = read_file($file);
+
     my $rv = $contents =~ s/=head1\s*$section_header\s*.*=head1/$pod/s;
 
     if ( !$rv ) {
         croak "No $section_header section replaced";
     }
 
-    my $permissions = (stat $file)[2] & 07777;
+    my $permissions = ( stat $file )[2] & 07777;
     chmod 0644, $file or croak "Unable to make file: $file writable - $!";
-    
+
     open my $fout, '>', $file
         or croak "Unable to open file: $file - $!";
-        
+
     print $fout $contents;
-    
+
     chmod $permissions, $file
         or croak "Unable to reinstate permissions for file: $file - $!";
-    
+
     close $fout or croak "Unable to close file: $file - $!";
 
     return 1;
@@ -172,7 +172,8 @@ sub do_create_metafile {
     my $self = shift;
     return if $self->{wrote_metadata};
 
-    my $p        = $self->{properties};
+    my $p = $self->{properties};
+
     #JONASBN: changed from originally lifted code
     my $metafile = $self->metafile;
 
