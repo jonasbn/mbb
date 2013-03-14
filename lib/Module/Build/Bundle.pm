@@ -11,6 +11,7 @@ use Tie::IxHash;
 use English qw( -no_match_vars );
 use File::Slurp;    #read_file
 use base qw(Module::Build);
+use utf8;
 
 use constant EXTENDED_POD_LINK_VERSION => 5.12.0;
 use constant PERMISSION_MASK => 07777;

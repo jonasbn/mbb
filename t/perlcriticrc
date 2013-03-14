@@ -35,6 +35,9 @@ allow = $@ $!
 #We subclass Module::Build so this is required
 [-NamingConventions::Capitalization]
 
+#I prefer UTF-8 
+[-CodeLayout::RequireASCII]
+
 # TODO
 
 [-InputOutput::RequireBracedFileHandleWithPrint]
