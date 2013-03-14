@@ -200,7 +200,7 @@ sub do_create_metafile {
     }
 
     if ($self->write_metafile(
-            $self->metafile, $self->get_metadata( fatal => 1 )
+            $self->metafile, $self->get_metadata( fatal => 1 ),
         )
         )
     {
