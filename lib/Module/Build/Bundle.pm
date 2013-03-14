@@ -13,6 +13,7 @@ use File::Slurp;    #read_file
 use base qw(Module::Build);
 
 use constant EXTENDED_POD_LINK_VERSION => 5.12.0;
+use constant PERMISSION_MASK => 07777;
 
 our $VERSION = '0.11';
 
@@ -88,7 +89,7 @@ sub ACTION_contents {
         croak "No $section_header section replaced";
     }
 
-    my $permissions = ( stat $file )[2] & 07777;
+    my $permissions = ( stat $file )[2] & PERMISSION_MASK;
     chmod 0644, $file or croak "Unable to make file: $file writable - $!";
 
     open my $fout, '>', $file
