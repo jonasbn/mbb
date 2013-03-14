@@ -75,7 +75,7 @@ sub ACTION_contents {
         || $self->{properties}->{module_name};
 
     #HACK: induced from test suite
-    my $dir = $self->notes('temp_wd') ? $self->notes('temp_wd') : 'lib';
+    my $dir = $self->notes('temp_wd') ? $self->notes('temp_wd') : 'blib/lib';
 
    ## no critic qw(ValuesAndExpressions::ProhibitNoisyQuotes)
     my $file = ( join '/', ( $cwd, $dir, @path ) ) . '.pm';
@@ -88,9 +88,17 @@ sub ACTION_contents {
         croak "No $section_header section replaced";
     }
 
+    my $permissions = (stat $file)[2] & 07777;
+    chmod 0644, $file or croak "Unable to make file: $file writable - $!";
+    
     open my $fout, '>', $file
         or croak "Unable to open file: $file - $!";
+        
     print $fout $contents;
+    
+    chmod $permissions, $file
+        or croak "Unable to reinstate permissions for file: $file - $!";
+    
     close $fout or croak "Unable to close file: $file - $!";
 
     return 1;
