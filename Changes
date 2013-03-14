@@ -5,6 +5,14 @@ $Id$
 Project Change log:
 http://logiclab.jira.com/browse/MBB#selectedTab=com.atlassian.jira.plugin.system.project%3Achangelog-panel
 
+Release 0.11, 2013.03.14, maintenance release, update not necessary
+
+- Addressed installation issue [MBB-37/[RT:83754] the issue was related to
+  permissions on main file in lib. We now work on the equivalent in blib/lib
+  https://logiclab.jira.com/browse/MBB-37
+  https://rt.cpan.org/Ticket/Display.html?id=83754
+
+
 Release 0.10, 2013.01.26, maintenance release, update not necessary
 
 - Addressed failing tests for 0.09 [MBB-36]/[RT:82128], issue with undeclared
