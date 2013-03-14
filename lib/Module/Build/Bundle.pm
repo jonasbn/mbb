@@ -525,6 +525,8 @@ but then I needed it for some other distributions, so I decided to separate it o
 
 =item * Lars Dɪᴇᴄᴋᴏᴡ (DAXIM) for reporting RT:83754, resulting in release 0.11
 
+=item * Andreas J. König (ANDK) for reporting RT:82128, included in release 0.10
+
 =back
 
 =head1 AUTHOR
