@@ -92,6 +92,7 @@ sub ACTION_contents {
         croak "No $section_header section replaced";
     }
 
+    ## no critic (Bangs::ProhibitBitwiseOperators)
     my $permissions = ( stat $file )[FILEMODE] & PERMISSION_MASK;
     chmod WRITEPERMISSION, $file or croak "Unable to make file: $file writable - $!";
 
