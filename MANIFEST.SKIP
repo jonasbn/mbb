@@ -28,6 +28,7 @@ svn-commit\.tmp
 \#$
 \b\.#
 \.bak$
+\.tdy
 
 # Avoid Devel::Cover files.
 \bcover_db\b
