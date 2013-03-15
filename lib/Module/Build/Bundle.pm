@@ -488,6 +488,23 @@ The above coverage report is based on release 0.11
 
 =head1 QUALITY AND CODING STANDARD
 
+The code passes L<Perl::Critic> tests a severity: 1 (brutal)
+
+The following policies have been disabled:
+
+       Perl::Critic::Policy::InputOutput::RequireBracedFileHandleWithPrint
+
+L<Perl::Critic> resource file, can be located in the F<t/> directory of the
+distribution see F <t/perlcriticrc>
+
+L<Perl::Tidy> resource file, can be obtained from the following URL:
+
+=over
+
+=item * L<https://logiclab.jira.com/wiki/display/OPEN/Perl-Tidy>
+
+=back
+
 =head1 DEVELOPMENT
 
 =head1 TODO
