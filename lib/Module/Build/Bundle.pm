@@ -461,6 +461,10 @@ replaced. A section with the generated contents cannot be added with out a
 placeholder in the form of designated section title. This might be changed in the
 future.
 
+Before version 0.11 the designated module was worked on in F<lib/>, I am still
+unsure as to what the right place to do this is. Perhaps I<hooking> into the
+build phase is not a good idea at all.
+
 =head1 BUG REPORTING
 
 Please report any bugs or feature requests via:
