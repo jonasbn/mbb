@@ -463,6 +463,16 @@ future.
 
 =head1 BUG REPORTING
 
+Please report any bugs or feature requests via:
+
+=over
+
+=item * email: bug−module-build-bundle at rt.cpan.org
+
+=item * HTTP: L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Module-Build-Bundle>
+
+=back
+
 =head1 TEST AND QUALITY
 
 =head2 TEST COVERAGE
