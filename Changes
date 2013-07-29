@@ -5,7 +5,19 @@ $Id$
 Project Change log:
 http://logiclab.jira.com/browse/MBB#selectedTab=com.atlassian.jira.plugin.system.project%3Achangelog-panel
 
-Release 0.11, 2013.03.15, maintenance release, update not necessary
+HEAD
+
+- Fixed up Changes file as part of my Questhub quest adhering to the standard
+  described in: CPAN::Changes::Spec [MBB-38]
+
+  Quest: http://questhub.io/realm/perl/quest/51f0fd8e18ba7dcf4b000040
+  Spec: https://metacpan.org/module/CPAN::Changes::Spec
+  
+  https://logiclab.jira.com/browse/MBB-38
+
+0.11 2013-03-15
+
+- Maintenance release, update not necessary
 
 - Addressed installation issue [MBB-37/[RT:83754] the issue was related to
   permissions on main file in lib. We now work on the equivalent in blib/lib.
@@ -14,7 +26,9 @@ Release 0.11, 2013.03.15, maintenance release, update not necessary
   https://rt.cpan.org/Ticket/Display.html?id=83754
 
 
-Release 0.10, 2013.01.26, maintenance release, update not necessary
+0.10 2013-01-26
+
+- Maintenance release, update not necessary
 
 - Addressed failing tests for 0.09 [MBB-36]/[RT:82128], issue with undeclared
   dependency on File::Slurp, introduced in release 0.09. Issue found by CPAN
@@ -23,7 +37,9 @@ Release 0.10, 2013.01.26, maintenance release, update not necessary
   https://rt.cpan.org/Ticket/Display.html?id=82128
 
 
-Release 0.09, 2012.12.02, maintenance release, update not necessary
+0.09 2012-12-02
+
+- Maintenance release, update not necessary
 
 - Attempt at address all the failing tests [MBB-35]
   http://logiclab.jira.com/browse/MBB-35
@@ -38,7 +54,9 @@ Release 0.09, 2012.12.02, maintenance release, update not necessary
   http://logiclab.jira.com/browse/MBB-34
 
 
-Release 0.08, 2012.11.22, maintenance release, update not necessary
+0.08 2012-11-22
+
+- Maintenance release, update not necessary
 
 - Attempt at address all the failing tests (308 fails against 177 passes at the time of writing) [MBB-31]
   http://logiclab.jira.com/browse/MBB-31
@@ -46,7 +64,9 @@ Release 0.08, 2012.11.22, maintenance release, update not necessary
 - Turned the dates in the changes file into ISO 8601 format
   
 
-Release 0.07, 2011.06.15, maintenance release, update not necessary
+0.07 2011-06-15
+
+- Maintenance release, update not necessary
 
 - Addressed issue with test suite and permissions [MBB-28]
   http://logiclab.jira.com/browse/MBB-28
@@ -58,31 +78,41 @@ Release 0.07, 2011.06.15, maintenance release, update not necessary
   http://logiclab.jira.com/browse/MBB-30
 
 
-Release 0.06, 2011.05.06, maintenance release, update not necessary
+0.06 2011-05-06
+
+- Maintenance release, update not necessary
 
 - Addressed failing tests [MBB-25] tests should now pass under newer perls [MBB-26], when we cheat on
   the Perl version http://logiclab.jira.com/browse/MBB-25 and http://logiclab.jira.com/browse/MBB-26
 
 
-Release 0.05, 2011.04.23, bug fix release, update not necessary
+0.05 2011-04-23
+
+- Bug fix release, update not necessary
 
 - Addressed failing tests [MBB-22] removing regression test suite, M::B is a  moving target
   http://logiclab.jira.com/browse/MBB-22
 
 
-Release 0.04, 2010.11.23, bug fix release, update recommended
+0.04 2010-11-23
+
+- Bug fix release, update recommended
 
 - Addressed failing tests [MBB-18] missing listing of required file
   http://logiclab.jira.com/browse/MBB-18
 
 
-Release 0.03, 2010.11.21, bug fix release, update recommended
+0.03 2010-11-21
+
+- Bug fix release, update recommended
 
 - Addressed failing tests [MBB-17]
   http://logiclab.jira.com/browse/MBB-17
 
 
-Release 0.02, 2010.09.26, bug fix release, update recommended
+0.02 2010-09-26
+
+ - Bug fix release, update recommended
 
 - Changed inheritance [MBB-13]
   http://logiclab.jira.com/browse/MBB-13
@@ -94,6 +124,6 @@ Release 0.02, 2010.09.26, bug fix release, update recommended
   http://logiclab.jira.com/browse/MBB-14
 
 
-Release 0.01, 2010.09.14
+0.01 2010-09-14
 
 - Initial release
