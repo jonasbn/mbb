@@ -18,7 +18,7 @@ use constant PERMISSION_MASK           => '07777';
 use constant WRITEPERMISSION           => '0644';
 use constant FILEMODE                  => 2;
 
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 
 #HACK: we need a writable copy for testing purposes
 ## no critic qw(Variables::ProhibitPackageVars Variables::ProhibitPunctuationVars)
