@@ -5,7 +5,7 @@ package Test::Class::Module::Build::Bundle;
 use strict;
 use warnings;
 use Test::More;
-use Module::Build::YAML;
+use CPAN::Meta::YAML;
 use Test::MockObject::Extends;
 use FindBin;
 use lib "$FindBin::Bin/../t";
@@ -15,7 +15,7 @@ use base qw(Test::Class);
 sub startup : Test(startup) {
     my $test = shift;
     
-    my $yaml = Module::Build::YAML->new();
+    my $yaml = CPAN::Meta::YAML->new();
     
     $test->{yaml} = $yaml;
 }
