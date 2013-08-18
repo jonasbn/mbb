@@ -5,6 +5,14 @@ $Id$
 Project Change log:
 http://logiclab.jira.com/browse/MBB#selectedTab=com.atlassian.jira.plugin.system.project%3Achangelog-panel
 
+HEAD
+
+- Added changes.t automatic assertion of the integrity of the Changes file
+  [MBB-40]
+
+  https://logiclab.jira.com/browse/MBB-40
+
+
 0.12 2013-08-01
 
 - Addressed issue reported by Ken Williams [RT:86220] so we now use CPAN::Meta::YAML
