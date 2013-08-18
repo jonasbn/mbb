@@ -8,7 +8,7 @@ http://logiclab.jira.com/browse/MBB#selectedTab=com.atlassian.jira.plugin.system
 HEAD
 
 - Added changes.t automatic assertion of the integrity of the Changes file
-  [MBB-40]
+  see also MBB-38 [MBB-40]
 
   https://logiclab.jira.com/browse/MBB-40
 
