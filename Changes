@@ -7,6 +7,10 @@ http://logiclab.jira.com/browse/MBB#selectedTab=com.atlassian.jira.plugin.system
 
 HEAD
 
+- Addressed [Compatibility::PerlMinimumVersionAndWhy] _pragma_utf8 
+  requires 5.008, so perl requirement has been bumped up to version 
+  5.006.
+
 - Added changes.t automatic assertion of the integrity of the Changes file
   see also MBB-38 [MBB-40]
 
