@@ -8,6 +8,7 @@
 \B\.svn\b
 \b_darcs\b
 svn-commit\.tmp
+\.git
 
 # Avoid Makemaker generated and utility files.
 \bMANIFEST\.bak
