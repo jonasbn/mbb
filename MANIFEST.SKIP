@@ -60,3 +60,6 @@ spikes
 
 # Avoid OSX specific files
 .DS_Store
+
+# Github - Travis integration
+\.travis\.yml
