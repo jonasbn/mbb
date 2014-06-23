@@ -10,7 +10,7 @@ use Cwd qw(getcwd);
 use Tie::IxHash;
 use English qw( -no_match_vars );
 use File::Slurp;    #read_file
-use base qw(Module::Build);
+use base qw(Module::Build::Base);
 use utf8;
 
 use constant EXTENDED_POD_LINK_VERSION => 5.12.0;
@@ -79,12 +79,12 @@ sub ACTION_contents {
         || $self->{properties}->{module_name};
 
     #HACK: induced from test suite
-    my $dir = $self->notes('temp_wd') ? $self->notes('temp_wd') : 'blib/lib';
+    my $dir = $self->notes('temp_wd') ? $self->notes('temp_wd') : $cwd . 'blib/lib';
 
     ## no critic qw(ValuesAndExpressions::ProhibitNoisyQuotes)
-    my $file = ( join '/', ( $cwd, $dir, @path ) ) . '.pm';
+    my $file = ( join '/', ( $dir, @path ) ) . '.pm';
 
-    my $contents = read_file($file);
+    my $contents = read_file($file) or croak "Unable to read file: $file - $!";
 
     my $rv = $contents =~ s/=head1\s*$section_header\s*.*=head1/$pod/s;
 
@@ -92,18 +92,10 @@ sub ACTION_contents {
         croak "No $section_header section replaced";
     }
 
-    ## no critic (Bangs::ProhibitBitwiseOperators)
-    my $permissions = ( stat $file )[FILEMODE] & PERMISSION_MASK;
-    chmod WRITEPERMISSION, $file
-        or croak "Unable to make file: $file writable - $!";
-
     open my $fout, '>', $file
         or croak "Unable to open file: $file - $!";
 
     print $fout $contents;
-
-    chmod $permissions, $file
-        or croak "Unable to reinstate permissions for file: $file - $!";
 
     close $fout or croak "Unable to close file: $file - $!";
 
@@ -157,24 +149,165 @@ sub create_mymeta {
 
 #lifted from Module::Build::Base
 sub get_metadata {
-    my ( $self, %args ) = @_;
+  my ($self, %args) = @_;
 
-    my $metadata = {};
-    $self->prepare_metadata( $metadata, undef, \%args );
+  my $fatal = $args{fatal} || 0;
+  my $p = $self->{properties};
 
-    my $package = ref $self;
+  $self->auto_config_requires if $args{auto};
+
+  # validate required fields
+  foreach my $f (qw(dist_name dist_version dist_author dist_abstract license)) {
+    my $field = $self->$f();
+    unless ( defined $field and length $field ) {
+      my $err = "ERROR: Missing required field '$f' for metafile\n";
+      if ( $fatal ) {
+        die $err;
+      }
+      else {
+        $self->log_warn($err);
+      }
+    }
+  }
+
+  my $package = ref $self;
+
+  my %metadata = (
+    name => $self->dist_name,
+    version => $self->normalize_version($self->dist_version),
+    author => $self->dist_author,
+    abstract => $self->dist_abstract,
+    #JONASBN: changed from originally lifted code
+    generated_by => "$package version $VERSION",
+    'meta-spec' => {
+      version => '2',
+      url     => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
+    },
+    dynamic_config => exists $p->{dynamic_config} ? $p->{dynamic_config} : 1,
+    release_status => $self->release_status,
+  );
+
+  my ($meta_license, $meta_license_url) = $self->_get_license;
+  $metadata{license} = [ $meta_license ];
+  $metadata{resources}{license} = [ $meta_license_url ] if defined $meta_license_url;
+
+  $metadata{prereqs} = $self->_normalize_prereqs;
 
     #JONASBN: changed from originally lifted code
-    $metadata->{generated_by} = "$package version $VERSION";
+    $self->_add_prereq('configure_requires', $package, $VERSION);
 
-    #JONASBN: changed from originally lifted code
-    $metadata->{configure_requires} = { "$package" => $VERSION };
+  if (exists $p->{no_index}) {
+    $metadata{no_index} = $p->{no_index};
+  } elsif (my $pkgs = eval { $self->find_dist_packages }) {
+    $metadata{provides} = $pkgs if %$pkgs;
+  } else {
+    $self->log_warn("$@\nWARNING: Possible missing or corrupt 'MANIFEST' file.\n" .
+                    "Nothing to enter for 'provides' field in metafile.\n");
+  }
 
-    return $metadata;
+  my $meta_add = _upconvert_metapiece($self->meta_add, 'add');
+  while (my($k, $v) = each %{$meta_add} ) {
+    $metadata{$k} = $v;
+  }
+
+  my $meta_merge = _upconvert_metapiece($self->meta_merge, 'merge');
+  while (my($k, $v) = each %{$meta_merge} ) {
+    $self->_hash_merge(\%metadata, $k, $v);
+  }
+
+  return \%metadata;
+}
+
+my %custom = (
+        resources => \&_upconvert_resources,
+);
+
+sub _upconvert_resources {
+  my ($input) = @_;
+  my %output;
+  for my $key (keys %{$input}) {
+    my $out_key = $key =~ /^\p{Lu}/ ? "x_\l$key" : $key;
+    if ($key eq 'repository') {
+      my $name = $input->{$key} =~ m{ \A http s? :// .* (<! \.git ) \z }xms ? 'web' : 'url';
+      $output{$out_key} = { $name => $input->{$key} };
+    }
+    elsif ($key eq 'bugtracker') {
+      $output{$out_key} = { web => $input->{$key} }
+    }
+    else {
+      $output{$out_key} = $input->{$key};
+    }
+  }
+  return \%output
+}
+
+my %keep = map { $_ => 1 } qw/keywords dynamic_config provides no_index name version abstract/;
+my %ignore = map { $_ => 1 } qw/distribution_type/;
+my %reject = map { $_ => 1 } qw/private author license requires recommends build_requires configure_requires conflicts/;
+
+#lifted from Module::Build::Base (unchanged, but unable to inherit)
+sub _upconvert_metapiece {
+  my ($input, $type) = @_;
+  return $input if exists $input->{'meta-spec'} && $input->{'meta-spec'}{version} == 2;
+
+  my %ret;
+  for my $key (keys %{$input}) {
+    if ($keep{$key}) {
+      $ret{$key} = $input->{$key};
+    }
+    elsif ($ignore{$key}) {
+      next;
+    }
+    elsif ($reject{$key}) {
+      croak "Can't $type $key, please use another mechanism";
+    }
+    elsif (my $converter = $custom{$key}) {
+      $ret{$key} = $converter->($input->{$key});
+    }
+    else {
+      my $out_key = $key =~ / \A x_ /xi ? $key : "x_$key";
+      $ret{$out_key} = $input->{$key};
+    }
+  }
+  return \%ret;
 }
 
 #Lifed from Module::Build::Base
 sub do_create_metafile {
+  my $self = shift;
+  return if $self->{wrote_metadata};
+
+  my $p = $self->{properties};
+
+  unless ($p->{license}) {
+    $self->log_warn("No license specified, setting license = 'unknown'\n");
+    $p->{license} = 'unknown';
+  }
+
+  my @metafiles = ( $self->metafile, $self->metafile2 );
+  # If we're in the distdir, the metafile may exist and be non-writable.
+  $self->delete_filetree($_) for @metafiles;
+
+  # Since we're building ourself, we have to do some special stuff
+  # here: the ConfigData module is found in blib/lib.
+  local @INC = @INC;
+  if (($self->module_name || '') eq 'Module::Build') {
+    $self->depends_on('config_data');
+    push @INC, File::Spec->catdir($self->blib, 'lib');
+  }
+
+  my $meta_obj = $self->_get_meta_object(
+    quiet => 1, fatal => 1, auto => 1
+  );
+  my @created = $self->_write_meta_files( $meta_obj, 'META' );
+  if ( @created ) {
+    $self->{wrote_metadata} = 1;
+    $self->_add_to_manifest('MANIFEST', $_) for @created;
+  }
+  return 1;
+}
+
+sub do_create_metafile_old {
     my $self = shift;
     return if $self->{wrote_metadata};
 
@@ -220,6 +353,8 @@ sub do_create_metafile {
 
 __END__
 
+=encoding utf8
+
 =head1 NAME
 
 Module::Build::Bundle - subclass for supporting Tasks and Bundles
@@ -232,8 +367,8 @@ This documentation describes version 0.11
 
     #In your Build.PL
     use Module::Build::Bundle;
-    
-    #Example lifted from: Perl::Critic::logicLAB 
+
+    #Example lifted from: Perl::Critic::logicLAB
     my $build = Module::Build::Bundle->new(
         dist_author   => 'Jonas B. Nielsen (jonasbn), <jonasbn@cpan.org>',
         module_name   => 'Perl::Critic::logicLAB',
@@ -244,16 +379,16 @@ This documentation describes version 0.11
             'Perl::Critic::Policy::logicLAB::RequireVersionFormat' => '0',
         },
     );
-    
+
     $build->create_build_script();
 
 
     #In your shell
     % ./Build contents
-    
+
     #Or implicitly executing contents action
     % ./Build
-    
+
 =head1 DESCRIPTION
 
 =head2 FEATURES
@@ -264,7 +399,7 @@ This documentation describes version 0.11
 
 =item * Links to required/listed distributions, with or without versions
 
-=item * Links to specific versions of distributions for perl 5.12.0 or newer if a 
+=item * Links to specific versions of distributions for perl 5.12.0 or newer if a
 version is specified
 
 =item * Inserts a POD section named CONTENTS or something specified by the
@@ -287,7 +422,7 @@ By default it overwrites the CONTENTS section with a POD link listing. You can
 specify a note indicating if what section you want to overwrite using the
 section_header note.
 
-    #Example lifted from: Perl::Critic::logicLAB 
+    #Example lifted from: Perl::Critic::logicLAB
     my $build = Module::Build::Bundle->new(
         dist_author   => 'Jonas B. Nielsen (jonasbn), <jonasbn@cpan.org>',
         module_name   => 'Perl::Critic::logicLAB',
@@ -298,7 +433,7 @@ section_header note.
             'Perl::Critic::Policy::logicLAB::RequireVersionFormat' => '0',
         },
     );
-    
+
     $build->notes('section_header' => 'POLICIES');
 
     $build->create_build_script();
@@ -355,7 +490,7 @@ For Module::Build::Bundle:
     configure_requires:
         Module::Build::Bundle: 0.01
     generated_by: 'Module::Build::Bundle version 0.01'
-    
+
 =head2 get_metadata
 
 This method has been lifted from L<Module::Build::Base|Module::Build::Base> and
@@ -367,7 +502,7 @@ It sets:
 
 =item * 'generated by <package> version <package version>' string in F<META.yml>
 
-=item * configure_requires: <package>: <version> 
+=item * configure_requires: <package>: <version>
 
 =back
 
@@ -398,13 +533,13 @@ will die with the above message.
 The default minimal section should look something like:
 
     =head1 CONTENTS
-    
+
     =head1
-    
+
 Or if you provide your own section_header
 
     =head1 <section header>
-    
+
     =head1
 
 =back

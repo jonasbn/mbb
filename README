@@ -7,8 +7,8 @@ VERSION
 SYNOPSIS
         #In your Build.PL
         use Module::Build::Bundle;
-    
-        #Example lifted from: Perl::Critic::logicLAB 
+
+        #Example lifted from: Perl::Critic::logicLAB
         my $build = Module::Build::Bundle->new(
             dist_author   => 'Jonas B. Nielsen (jonasbn), <jonasbn@cpan.org>',
             module_name   => 'Perl::Critic::logicLAB',
@@ -19,13 +19,13 @@ SYNOPSIS
                 'Perl::Critic::Policy::logicLAB::RequireVersionFormat' => '0',
             },
         );
-    
+
         $build->create_build_script();
 
 
         #In your shell
         % ./Build contents
-    
+
         #Or implicitly executing contents action
         % ./Build
 
@@ -55,7 +55,7 @@ SUBROUTINES/METHODS
     You can specify a note indicating if what section you want to overwrite
     using the section_header note.
 
-        #Example lifted from: Perl::Critic::logicLAB 
+        #Example lifted from: Perl::Critic::logicLAB
         my $build = Module::Build::Bundle->new(
             dist_author   => 'Jonas B. Nielsen (jonasbn), <jonasbn@cpan.org>',
             module_name   => 'Perl::Critic::logicLAB',
@@ -66,7 +66,7 @@ SUBROUTINES/METHODS
                 'Perl::Critic::Policy::logicLAB::RequireVersionFormat' => '0',
             },
         );
-    
+
         $build->notes('section_header' => 'POLICIES');
 
         $build->create_build_script();
@@ -151,13 +151,13 @@ DIAGNOSTICS
         The default minimal section should look something like:
 
             =head1 CONTENTS
-    
+
             =head1
 
         Or if you provide your own section_header
 
             =head1 <section header>
-    
+
             =head1
 
 CONFIGURATION AND ENVIRONMENT
@@ -281,8 +281,8 @@ ACKNOWLEDGEMENTS
 
     *   The Module::Build developers
 
-    *   Lars Dɪᴇᴄᴋᴏᴡ (DAXIM) for reporting RT:83754, resulting in
-        release 0.11
+    *   Lars Dɪᴇᴄᴋᴏᴡ (DAXIM) for reporting RT:83754, resulting in release
+        0.11
 
     *   Andreas J. König (ANDK) for reporting RT:82128, included in release
         0.10
