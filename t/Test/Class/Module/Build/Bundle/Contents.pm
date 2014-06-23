@@ -209,17 +209,6 @@ sub teardown : Test(teardown) {
     my $file  = $test->{file};
     my $build = $test->{build};
 
-    #if (-e "$test->{temp_wd}/$file") {
-    #
-    #    unlink("$test->{temp_wd}/$file")
-    #        or die "Unable to remove file: $test->{temp_wd}/$file - $!";
-    #}
-
-    #if (-e $test->{temp_wd}) {
-    #    rmdir($test->{temp_wd})
-    #       or die "Unable to remove directory: $test->{temp_wd} - $!";
-    #}
-
     $build->notes( 'section_header' => '' );
 }
 
