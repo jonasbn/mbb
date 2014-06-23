@@ -7,6 +7,6 @@ perl:
   - "5.10"
 
 install:
-    - "cpanm -v --installdeps --notest --mirror http://cpan.mirrors.travis-ci.org ."
+    - "cpanm -v --installdeps --notest ."
 
 script: "perl Build.PL; ./Build test"
