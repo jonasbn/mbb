@@ -76,12 +76,6 @@ sub do_create_metafile : Test(12) {
 
     my $filename = $build->metafile;
 
-    diag( "my file: ",  $build->metafile );
-    diag( "my file2: ", $build->metafile2 );
-
-    #my $meta = $yaml->read($filename)->[0];
-
-    #my $meta = $build->read_metafile( $build->metafile );
     my $meta = CPAN::Meta->load_file($build->metafile);
 
     if ( $yaml->errstr ) {
