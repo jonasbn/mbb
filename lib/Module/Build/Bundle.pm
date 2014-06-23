@@ -14,9 +14,6 @@ use base qw(Module::Build::Base);
 use utf8;
 
 use constant EXTENDED_POD_LINK_VERSION => 5.12.0;
-use constant PERMISSION_MASK           => '07777';
-use constant WRITEPERMISSION           => '0644';
-use constant FILEMODE                  => 2;
 
 our $VERSION = '0.12';
 
