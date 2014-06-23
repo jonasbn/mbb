@@ -99,8 +99,6 @@ SKIP: {
         ok( my $content = read_file($test->{tmpdir}->name.'/'.$test->{file}),
             'reading file contents' );
 
-        diag($content);
-
         like(
             $content,
             qr/=item \* L<Module::Build\|Module::Build>/s,
