@@ -284,7 +284,7 @@ Module::Build::Bundle - subclass for supporting Tasks and Bundles
 
 =head1 VERSION
 
-This documentation describes version 0.11
+This documentation describes version 0.12
 
 =head1 SYNOPSIS
 
@@ -635,7 +635,7 @@ but then I needed it for some other distributions, so I decided to separate it o
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2010-2013 jonasbn, all rights reserved.
+Copyright 2010-2014 jonasbn, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
