@@ -35,6 +35,16 @@ my $build = Module::Build->new(
         'Tie::IxHash'   => '0',
         'perl'          => '5.8.0',
         'Module::Build' => '0.42',
+        'Env'                       => '0',
+        'File::Copy'                => '0',
+        'File::Tempdir'             => '0',
+        'FindBin'                   => '0',
+        'CPAN::Meta::YAML'          => '0',
+        'Test::Class'               => '0',
+        'Test::More'                => '0',
+        'Test::Exception'           => '0',
+        'File::Tempdir'             => '0',
+        'Test::MockObject::Extends' => '0',
     },
     meta_merge => {
         resources => {
