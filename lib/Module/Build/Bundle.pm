@@ -1,7 +1,5 @@
 package Module::Build::Bundle;
 
-# $Id$
-
 use 5.008;    #$^V
 use strict;
 use warnings;
