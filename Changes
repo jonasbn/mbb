@@ -1,11 +1,14 @@
 Changes file for Module::Build::Bundle
 
-$Id$
-
-Project Change log:
-http://logiclab.jira.com/browse/MBB#selectedTab=com.atlassian.jira.plugin.system.project%3Achangelog-panel
-
 HEAD
+
+- Examined and addressed issues with Module::Build compability, we are now
+  dependent on version 0.42. New code lifted from Module::Build since
+  proper inheritance is not possible at this time, pondering patches
+
+- The whole test suite has been revisited and all tests now pass again
+  as we rely on File::Tempdir instead of own logic, this eliminated a lot
+  of code and removed at least one bug
 
 - Addressed [Compatibility::PerlMinimumVersionAndWhy] _pragma_utf8 
   requires 5.008, so perl requirement has been bumped up to version 
