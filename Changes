@@ -1,6 +1,9 @@
 Changes file for Module::Build::Bundle
 
-HEAD
+0.13 2014-06-24, update recommended
+
+- Core implementation updated to comply with Module::Build 0.42, update
+  recommended
 
 - Changed license to be Artistic 2.0, please see the LICENSE file included
   with the distribution
@@ -25,6 +28,8 @@ HEAD
 
 0.12 2013-08-01
 
+- Maintenance release, update not necessary
+
 - Addressed issue reported by Ken Williams [RT:86220] so we now use CPAN::Meta::YAML
   instead of Module::Build::YAML [MBB-39]
 
@@ -37,6 +42,7 @@ HEAD
   Spec: https://metacpan.org/module/CPAN::Changes::Spec
 
   https://logiclab.jira.com/browse/MBB-38
+
 
 0.11 2013-03-15
 
@@ -81,11 +87,12 @@ HEAD
 
 - Maintenance release, update not necessary
 
-- Attempt at address all the failing tests (308 fails against 177 passes at the time of writing) [MBB-31]
+- Attempt at address all the failing tests (308 fails against 177 passes at
+  the time of writing) [MBB-31]
   http://logiclab.jira.com/browse/MBB-31
-  
+
 - Turned the dates in the changes file into ISO 8601 format
-  
+
 
 0.07 2011-06-15
 
@@ -105,15 +112,18 @@ HEAD
 
 - Maintenance release, update not necessary
 
-- Addressed failing tests [MBB-25] tests should now pass under newer perls [MBB-26], when we cheat on
-  the Perl version http://logiclab.jira.com/browse/MBB-25 and http://logiclab.jira.com/browse/MBB-26
+- Addressed failing tests [MBB-25] tests should now pass under newer perls
+  [MBB-26], when we cheat on the Perl version
+  http://logiclab.jira.com/browse/MBB-25 and
+  http://logiclab.jira.com/browse/MBB-26
 
 
 0.05 2011-04-23
 
 - Bug fix release, update not necessary
 
-- Addressed failing tests [MBB-22] removing regression test suite, M::B is a  moving target
+- Addressed failing tests [MBB-22] removing regression test suite, M::B is
+  a  moving target
   http://logiclab.jira.com/browse/MBB-22
 
 
