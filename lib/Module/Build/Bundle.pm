@@ -633,7 +633,6 @@ but then I needed it for some other distributions, so I decided to separate it o
 
 Copyright 2010-2014 jonasbn, all rights reserved.
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+Module::Build::Bundle is released under the Artistic License 2.0
 
 =cut

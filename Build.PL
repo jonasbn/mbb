@@ -10,7 +10,7 @@ my $build = Module::Build->new(
     dist_author   => 'Jonas B. Nielsen (jonasbn), <jonasbn@cpan.org>',
     module_name   => 'Module::Build::Bundle',
     dist_abstract => 'build assistance for Bundle and Task distributions',
-    license       => 'artistic',
+    license       => 'artistic_2',
     create_makefile_pl => 'traditional',
     create_readme      => 1,
     configure_requires => { 'Module::Build' => '0.42' },

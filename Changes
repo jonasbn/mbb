@@ -2,6 +2,9 @@ Changes file for Module::Build::Bundle
 
 HEAD
 
+- Changed license to be Artistic 2.0, please see the LICENSE file included
+  with the distribution
+
 - Examined and addressed issues with Module::Build compability, we are now
   dependent on version 0.42. New code lifted from Module::Build since
   proper inheritance is not possible at this time, pondering patches
@@ -10,8 +13,8 @@ HEAD
   as we rely on File::Tempdir instead of own logic, this eliminated a lot
   of code and removed at least one bug
 
-- Addressed [Compatibility::PerlMinimumVersionAndWhy] _pragma_utf8 
-  requires 5.008, so perl requirement has been bumped up to version 
+- Addressed [Compatibility::PerlMinimumVersionAndWhy] _pragma_utf8
+  requires 5.008, so perl requirement has been bumped up to version
   5.006.
 
 - Added changes.t automatic assertion of the integrity of the Changes file
@@ -24,7 +27,7 @@ HEAD
 
 - Addressed issue reported by Ken Williams [RT:86220] so we now use CPAN::Meta::YAML
   instead of Module::Build::YAML [MBB-39]
-  
+
   https://logiclab.jira.com/browse/MBB-39
 
 - Fixed up Changes file as part of my Questhub quest adhering to the standard
@@ -32,7 +35,7 @@ HEAD
 
   Quest: http://questhub.io/realm/perl/quest/51f0fd8e18ba7dcf4b000040
   Spec: https://metacpan.org/module/CPAN::Changes::Spec
-  
+
   https://logiclab.jira.com/browse/MBB-38
 
 0.11 2013-03-15
