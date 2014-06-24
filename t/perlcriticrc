@@ -20,7 +20,6 @@ allow_leading_tabs = 0
 functions = :builtins
 exclude_functions = print
 
-
 [-Documentation::RequirePodLinksIncludeText]
 [Variables::ProhibitPunctuationVars]
 allow = $@ $!
@@ -71,3 +70,5 @@ allow = $@ $!
 
 #Issue in code lifted from Module::Build
 [-ControlStructures::ProhibitCascadingIfElse]
+
+[-Miscellanea::RequireRcsKeywords]
