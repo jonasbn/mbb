@@ -538,11 +538,11 @@ Please report any bugs or feature requests via:
     ---------------------------- ------ ------ ------ ------ ------ ------ ------
     File                           stmt   bran   cond    sub    pod   time  total
     ---------------------------- ------ ------ ------ ------ ------ ------ ------
-    lib/Module/Build/Bundle.pm     48.5   13.9   14.3   84.2  100.0  100.0   45.7
-    Total                          48.5   13.9   14.3   84.2  100.0  100.0   45.7
+    lib/Module/Build/Bundle.pm     44.5   18.3   23.0   70.5  100.0  100.0   39.6
+    Total                          44.5   18.3   23.0   70.5  100.0  100.0   39.6
     ---------------------------- ------ ------ ------ ------ ------ ------ ------
 
-The above coverage report is based on release 0.11
+The above coverage report is based on release 0.13
 
 =head1 QUALITY AND CODING STANDARD
 
