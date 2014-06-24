@@ -157,7 +157,8 @@ sub get_metadata {
     unless ( defined $field and length $field ) {
       my $err = "ERROR: Missing required field '$f' for metafile\n";
       if ( $fatal ) {
-        die $err;
+        #JONASBN: Changed to croak to satisfy Perl::Critic
+        croak $err;
       }
       else {
         $self->log_warn($err);

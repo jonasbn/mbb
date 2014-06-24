@@ -68,3 +68,6 @@ allow = $@ $!
 [-Documentation::ProhibitVerbatimMarkup]
 
 [-Compatibility::PodMinimumVersion]
+
+#Issue in code lifted from Module::Build
+[-ControlStructures::ProhibitCascadingIfElse]
