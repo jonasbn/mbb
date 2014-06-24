@@ -48,10 +48,10 @@ my $build = Module::Build->new(
     },
     meta_merge => {
         resources => {
-            homepage => 'https://github.com/jonasbn/MBB',
+            homepage => 'https://github.com/jonasbn/mbb',
             bugtracker =>
                 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=Module-Build-Bundle',
-            repository => 'https://github.com/jonasbn/MBB',
+            repository => 'https://github.com/jonasbn/mbb',
         }
     },
 );
