@@ -97,182 +97,138 @@ sub ACTION_contents {
     return 1;
 }
 
-#lifted from Module::Build::Base
-sub create_mymeta {
-    my ($self)     = @_;
-    my $mymetafile = $self->mymetafile;
-    my $metafile   = $self->metafile;
-
-    # cleanup
-    if ( $self->delete_filetree($mymetafile) ) {
-        $self->log_verbose("Removed previous '$mymetafile'\n");
-    }
-    $self->log_info(
-        "Creating new '$mymetafile' with configuration results\n");
-
-    # use old meta and update prereqs, if possible
-    my $mymeta;
-    if ( -e $metafile ) {
-        $mymeta = eval { $self->read_metafile( $self->metafile ) };
-    }
-
-    # if we read META OK, just update it
-    if ( defined $mymeta ) {
-        my $prereqs = $self->_normalize_prereqs;
-        for my $t ( keys %{$prereqs} ) {
-            $mymeta->{$t} = $prereqs->{$t};
-        }
-    }
-
-    # but generate from scratch, ignoring errors if META doesn't exist
-    else {
-        $mymeta = $self->get_metadata( fatal => 0 );
-    }
-
-    my $package = ref $self;
-
-    # MYMETA is always static
-    $mymeta->{dynamic_config} = 0;
-
-    # Note which M::B created it
-    #JONASBN: changed from originally lifted code
-    $mymeta->{generated_by} = "$package version $VERSION";
-
-    $self->write_metafile( $mymetafile, $mymeta );
-    return 1;
+sub _write_meta_files {
+  my $self = shift;
+  my ($meta, $file) = @_;
+  $file =~ s{\.(?:yml|json)$}{};
+ 
+  my @created;
+  push @created, "$file\.yml"
+    if $meta && $meta->save( "$file\.yml", {version => "1.4"} );
+  push @created, "$file\.json"
+    if $meta && $meta->save( "$file\.json" );
+ 
+  if ( @created ) {
+    $self->log_info("Created " . join(" and ", @created) . "\n");
+  }
+  return @created;
 }
 
 #lifted from Module::Build::Base
-sub get_metadata {
-  my ($self, %args) = @_;
-
-  my $fatal = $args{fatal} || 0;
+sub prepare_metadata {
+  my ($self, $node, $keys) = @_;
   my $p = $self->{properties};
 
-  $self->auto_config_requires if $args{auto};
+  #JONASBN: Added package resolution
+  my $package = ref $self;
+  my $version = $package::VERSION;
 
-  # validate required fields
-  foreach my $f (qw(dist_name dist_version dist_author dist_abstract license)) {
-    my $field = $self->$f();
-    unless ( defined $field and length $field ) {
-      my $err = "ERROR: Missing required field '$f' for metafile\n";
-      if ( $fatal ) {
-        #JONASBN: Changed to croak to satisfy Perl::Critic
-        croak $err;
+  # A little helper sub
+  my $add_node = sub {
+    my ($name, $val) = @_;
+    $node->{$name} = $val;
+    push @$keys, $name if $keys;
+  };
+
+  foreach (qw(dist_name dist_version dist_author dist_abstract license)) {
+    (my $name = $_) =~ s/^dist_//;
+    $add_node->($name, $self->$_());
+    die "ERROR: Missing required field '$_' for META.yml\n"
+      unless defined($node->{$name}) && length($node->{$name});
+  }
+  $node->{version} = $self->normalize_version($node->{version}); 
+
+  if (defined( my $l = $self->license )) {
+    die "Unknown license string '$l'"
+      unless exists $self->valid_licenses->{ $l };
+
+    if (my $key = $self->valid_licenses->{ $l }) {
+      my $class = "Software::License::$key";
+      if (eval "use $class; 1") {
+        # S::L requires a 'holder' key
+        $node->{resources}{license} = $class->new({holder=>"nobody"})->url;
       }
       else {
-        $self->log_warn($err);
+        $node->{resources}{license} = $self->_license_url($l);
+      }
+    }
+    # XXX we are silently omitting the url for any unknown license
+  }
+
+  # copy prereq data structures so we can modify them before writing to META
+  my %prereq_types;
+  for my $type ( 'configure_requires', @{$self->prereq_action_types} ) {
+    if (exists $p->{$type}) {  
+      for my $mod ( keys %{ $p->{$type} } ) {
+        $prereq_types{$type}{$mod} = 
+          $self->normalize_version($p->{$type}{$mod});
       }
     }
   }
 
-  my $package = ref $self;
+  # add current Module::Build to configure_requires if there 
+  # isn't one already specified (but not ourself, so we're not circular)
+  if ( $self->dist_name ne 'Module-Build' 
+    && $self->auto_configure_requires
+    && ! exists $prereq_types{'configure_requires'}{'Module::Build'}
+  ) {
+    $prereq_types{configure_requires}{'Module::Build'} = $VERSION;
+    #JONASBN added configure requires
+    $prereq_types{configure_requires}{$package} = $version;
+  }
 
-  my %metadata = (
-    name => $self->dist_name,
-    version => $self->normalize_version($self->dist_version),
-    author => $self->dist_author,
-    abstract => $self->dist_abstract,
-    #JONASBN: changed from originally lifted code
-    generated_by => "$package version $VERSION",
-    'meta-spec' => {
-      version => '2',
-      url     => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
-    },
-    dynamic_config => exists $p->{dynamic_config} ? $p->{dynamic_config} : 1,
-    release_status => $self->release_status,
-  );
+  for my $t ( keys %prereq_types ) {
+      $add_node->($t, $prereq_types{$t});
+  }
 
-  my ($meta_license, $meta_license_url) = $self->_get_license;
-  $metadata{license} = [ $meta_license ];
-  $metadata{resources}{license} = [ $meta_license_url ] if defined $meta_license_url;
-
-  $metadata{prereqs} = $self->_normalize_prereqs;
-
-    #JONASBN: changed from originally lifted code
-    $self->_add_prereq('configure_requires', $package, $VERSION);
-
-  if (exists $p->{no_index}) {
-    $metadata{no_index} = $p->{no_index};
-  } elsif (my $pkgs = eval { $self->find_dist_packages }) {
-    $metadata{provides} = $pkgs if %$pkgs;
-  } else {
+  if (exists $p->{dynamic_config}) {
+    $add_node->('dynamic_config', $p->{dynamic_config});
+  }
+  my $pkgs = eval { $self->find_dist_packages };
+  if ($@) {
     $self->log_warn("$@\nWARNING: Possible missing or corrupt 'MANIFEST' file.\n" .
-                    "Nothing to enter for 'provides' field in metafile.\n");
+        "Nothing to enter for 'provides' field in META.yml\n");
+  } else {
+    $node->{provides} = $pkgs if %$pkgs;
+  }
+;
+  if (exists $p->{no_index}) {
+    $add_node->('no_index', $p->{no_index});
   }
 
-  my $meta_add = _upconvert_metapiece($self->meta_add, 'add');
-  while (my($k, $v) = each %{$meta_add} ) {
-    $metadata{$k} = $v;
+  $add_node->('generated_by', "$package version $version");
+
+  $add_node->('meta-spec', 
+        {version => '1.4',
+         url     => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
+        });
+
+  while (my($k, $v) = each %{$self->meta_add}) {
+    $add_node->($k, $v);
   }
 
-  my $meta_merge = _upconvert_metapiece($self->meta_merge, 'merge');
-  while (my($k, $v) = each %{$meta_merge} ) {
-    $self->_hash_merge(\%metadata, $k, $v);
+  while (my($k, $v) = each %{$self->meta_merge}) {
+    $self->_hash_merge($node, $k, $v);
   }
 
-  return \%metadata;
-}
-
-my %custom = (
-        resources => \&_upconvert_resources,
-);
-
-sub _upconvert_resources {
-  my ($input) = @_;
-  my %output;
-  for my $key (keys %{$input}) {
-    my $out_key = $key =~ /^\p{Lu}/ ? "x_\l$key" : $key;
-    if ($key eq 'repository') {
-      my $name = $input->{$key} =~ m{ \A http s? :// .* (<! \.git ) \z }xms ? 'web' : 'url';
-      $output{$out_key} = { $name => $input->{$key} };
-    }
-    elsif ($key eq 'bugtracker') {
-      $output{$out_key} = { web => $input->{$key} }
-    }
-    else {
-      $output{$out_key} = $input->{$key};
-    }
-  }
-  return \%output
-}
-
-my %keep = map { $_ => 1 } qw/keywords dynamic_config provides no_index name version abstract/;
-my %ignore = map { $_ => 1 } qw/distribution_type/;
-my %reject = map { $_ => 1 } qw/private author license requires recommends build_requires configure_requires conflicts/;
-
-#lifted from Module::Build::Base (unchanged, but unable to inherit)
-sub _upconvert_metapiece {
-  my ($input, $type) = @_;
-  return $input if exists $input->{'meta-spec'} && $input->{'meta-spec'}{version} == 2;
-
-  my %ret;
-  for my $key (keys %{$input}) {
-    if ($keep{$key}) {
-      $ret{$key} = $input->{$key};
-    }
-    elsif ($ignore{$key}) {
-      next;
-    }
-    elsif ($reject{$key}) {
-      croak "Can't $type $key, please use another mechanism";
-    }
-    elsif (my $converter = $custom{$key}) {
-      $ret{$key} = $converter->($input->{$key});
-    }
-    else {
-      my $out_key = $key =~ / \A x_ /xi ? $key : "x_$key";
-      $ret{$out_key} = $input->{$key};
-    }
-  }
-  return \%ret;
+  return $node;
 }
 
 1;
 
 __END__
 
+=pod
+
 =encoding utf8
+
+=begin markdown
+
+[![CPAN version](https://badge.fury.io/pl/Module-Build-Bundle.svg)](http://badge.fury.io/pl/Module-Build-Bundle)
+[![Build Status](https://travis-ci.org/jonasbn/mbb.svg?branch=master)](https://travis-ci.org/jonasbn/mbb)
+[![Coverage Status](https://coveralls.io/repos/jonasbn/mbb/badge.png)](https://coveralls.io/r/jonasbn/mbb)
+
+=end markdown
 
 =head1 NAME
 
