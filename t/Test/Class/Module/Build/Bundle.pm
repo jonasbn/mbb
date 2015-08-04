@@ -5,11 +5,14 @@ package Test::Class::Module::Build::Bundle;
 use strict;
 use warnings;
 use Test::More;
+use CPAN::Meta;
 use CPAN::Meta::YAML;
 use Test::MockObject::Extends;
 use FindBin;
 use lib "$FindBin::Bin/../t";
-use File::Tempdir;
+use File::Temp qw/ tempfile tempdir /;
+#require File::Temp;
+use Env qw($TEST_VERBOSE);
 
 use base qw(Test::Class);
 
@@ -17,7 +20,17 @@ sub startup : Test(startup) {
     my $test = shift;
 
     my $yaml   = CPAN::Meta::YAML->new();
-    my $tmpdir = File::Tempdir->new(CLEANUP => 0);
+    my $tmpdir = tempdir( CLEANUP => 0 );
+    #my $tmpdir = File::Tempdir->new(CLEANUP => 0);
+    #my ($fh, $filename) = tempfile();
+
+    if ($TEST_VERBOSE) {
+        diag "Created temporary directory: ", $tmpdir;
+
+        my $mode = ( stat( $tmpdir ) )[2];
+
+        diag sprintf "with permissions %04o\n", $mode & 07777;
+    }
 
     $test->{yaml}   = $yaml;
     $test->{tmpdir} = $tmpdir;
@@ -26,9 +39,9 @@ sub startup : Test(startup) {
 sub setup : Test(setup => 3) {
     my $test = shift;
 
-    ok(-e $test->{tmpdir}->name, 'temporary directory created');
+    ok(-e $test->{tmpdir}, 'temporary directory created');
 
-    diag($test->{tmpdir}->name);
+    diag($test->{tmpdir});
 
     use_ok('Module::Build::Bundle');
 
@@ -61,9 +74,11 @@ sub do_create_metafile : Test(12) {
     my $version           = $test->{version};
     my $canonical_version = $test->{canonical};
 
-    ok( $build->metafile( $test->{tmpdir}->name . '/testMETA.yml' ),
+    diag("tmpdir = ".$test->{tmpdir});
+
+    ok( $build->metafile( $test->{tmpdir} . '/META.yml' ),
         'setting META file name to testMETA.yml' );
-    ok( $build->metafile2( $test->{tmpdir}->name . '/testMETA.json' ),
+    ok( $build->metafile2( $test->{tmpdir} . '/META.json' ),
         'setting META file name to testMETA.json' );
 
     ok( $build->do_create_metafile, 'creating META files' );
@@ -73,8 +88,6 @@ sub do_create_metafile : Test(12) {
 
     ok( -r $build->metafile,  'metafile ' . $build->metafile . ' is readable' );
     ok( -r $build->metafile2, 'metafile2 ' . $build->metafile2 . ' is readable' );
-
-    my $filename = $build->metafile;
 
     my $meta = CPAN::Meta->load_file($build->metafile);
 
