@@ -97,6 +97,42 @@ sub ACTION_contents {
     return 1;
 }
 
+#Lifted from Module::Build::Base
+sub do_create_metafile {
+  my $self = shift;
+  return if $self->{wrote_metadata};
+  my $p = $self->{properties};
+
+  unless ($p->{license}) {
+    $self->log_warn("No license specified, setting license = 'unknown'\n");
+    $p->{license} = 'unknown';
+  }
+
+  my @metafiles = ( $self->metafile, $self->metafile2 );
+  # If we're in the distdir, the metafile may exist and be non-writable.
+  $self->delete_filetree($_) for @metafiles;
+
+  # Since we're building ourself, we have to do some special stuff
+  # here: the ConfigData module is found in blib/lib.
+  local @INC = @INC;
+  if (($self->module_name || '') eq 'Module::Build') {
+    $self->depends_on('config_data');
+    push @INC, File::Spec->catdir($self->blib, 'lib');
+  }
+
+  my $meta_obj = $self->_get_meta_object(
+    quiet => 0, fatal => 1, auto => 1
+  );
+
+  my @created = $self->_write_meta_files( $meta_obj, $self->metafile );
+
+  if ( @created ) {
+    $self->{wrote_metadata} = 1;
+    $self->_add_to_manifest('MANIFEST', $_) for @created;
+  }
+  return 1;
+}
+
 sub _write_meta_files {
   my $self = shift;
   my ($meta, $file) = @_;
