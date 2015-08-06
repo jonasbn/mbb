@@ -81,8 +81,8 @@ sub do_create_metafile : Test(12) {
     ok( $build->metafile2( $test->{tmpdir} . '/META.json' ),
         'setting META file name to testMETA.json' );
 
-    ok( $build->do_create_metafile, 'creating META files' );
-
+    ok( my $rv = $build->do_create_metafile, 'creating META files' );
+    
     ok( -e $build->metafile,  'metafile ' . $build->metafile . ' exists' );
     ok( -e $build->metafile2, 'metafile2 ' . $build->metafile2 . ' exists' );
 
