@@ -74,7 +74,7 @@ sub ACTION_contents {
         || $self->{properties}->{module_name};
 
     #HACK: induced from test suite
-    my $dir = $self->notes('temp_wd') ? $self->notes('temp_wd') : $cwd . 'blib/lib';
+    my $dir = $self->notes('temp_wd') ? $self->notes('temp_wd') : $cwd .'/t/';
 
     ## no critic qw(ValuesAndExpressions::ProhibitNoisyQuotes)
     my $file = ( join '/', ( $dir, @path ) ) . '.pm';
@@ -124,6 +124,7 @@ sub do_create_metafile {
     quiet => 0, fatal => 1, auto => 1
   );
 
+  #JONASBN: Changed file parameter
   my @created = $self->_write_meta_files( $meta_obj, $self->metafile );
 
   if ( @created ) {
@@ -133,6 +134,31 @@ sub do_create_metafile {
   return 1;
 }
 
+#Liften from Module::Build, no changes yet
+sub _get_meta_object {
+  my $self = shift;
+  my %args = @_;
+  return unless $self->try_require("CPAN::Meta", "2.110420");
+
+  my $meta;
+  eval {
+    my $data = $self->get_metadata(
+      fatal => $args{fatal},
+      auto => $args{auto},
+    );
+    $data->{dynamic_config} = $args{dynamic} if defined $args{dynamic};
+    $meta = CPAN::Meta->create($data);
+  };
+  if ($@ && ! $args{quiet}) {
+    $self->log_warn(
+      "Could not get valid metadata. Error is: $@\n"
+    );
+  }
+
+  return $meta;
+}
+
+#lifted from Module::Build::Base
 sub _write_meta_files {
   my $self = shift;
   my ($meta, $file) = @_;
@@ -148,6 +174,87 @@ sub _write_meta_files {
     $self->log_info("Created " . join(" and ", @created) . "\n");
   }
   return @created;
+}
+
+#lifted from Module::Build::Base, no changes yet
+sub get_metadata {
+  my ($self, %args) = @_;
+
+  my $fatal = $args{fatal} || 0;
+  my $p = $self->{properties};
+
+  $self->auto_config_requires if $args{auto};
+
+  # validate required fields
+  foreach my $f (qw(dist_name dist_version dist_author dist_abstract license)) {
+    my $field = $self->$f();
+    unless ( defined $field and length $field ) {
+      my $err = "ERROR: Missing required field '$f' for metafile\n";
+      if ( $fatal ) {
+        die $err;
+      }
+      else {
+        $self->log_warn($err);
+      }
+    }
+  }
+
+  my %metadata = (
+    name => $self->dist_name,
+    version => $self->normalize_version($self->dist_version),
+    author => $self->dist_author,
+    abstract => $self->dist_abstract,
+    generated_by => "Module::Build::Bundle version $Module::Build::Bundle::VERSION",
+    'meta-spec' => {
+      version => '2',
+      url     => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
+    },
+    dynamic_config => exists $p->{dynamic_config} ? $p->{dynamic_config} : 1,
+    release_status => $self->release_status,
+  );
+
+  my ($meta_license, $meta_license_url) = $self->_get_license;
+  $metadata{license} = [ $meta_license ];
+  $metadata{resources}{license} = [ $meta_license_url ] if defined $meta_license_url;
+
+  $metadata{prereqs} = $self->_normalize_prereqs;
+
+  if (exists $p->{no_index}) {
+    $metadata{no_index} = $p->{no_index};
+  } elsif (my $pkgs = eval { $self->find_dist_packages }) {
+    $metadata{provides} = $pkgs if %$pkgs;
+  } else {
+    $self->log_warn("$@\nWARNING: Possible missing or corrupt 'MANIFEST' file.\n" .
+                    "Nothing to enter for 'provides' field in metafile.\n");
+  }
+
+  if (my $add = $self->meta_add) {
+    if (not exists $add->{'meta-spec'} or $add->{'meta-spec'}{version} != 2) {
+      require CPAN::Meta::Converter;
+      if (CPAN::Meta::Converter->VERSION('2.141170')) {
+        $add = CPAN::Meta::Converter->new($add)->upgrade_fragment;
+        delete $add->{prereqs}; # XXX this would now overwrite all prereqs
+      }
+      else {
+        $self->log_warn("Can't meta_add without CPAN::Meta 2.141170");
+      }
+    }
+
+    while (my($k, $v) = each %{$add}) {
+      $metadata{$k} = $v;
+    }
+  }
+
+  if (my $merge = $self->meta_merge) {
+    if (eval { require CPAN::Meta::Merge }) {
+      %metadata = %{ CPAN::Meta::Merge->new(default_version => '1.4')->merge(\%metadata, $merge) };
+    }
+    else {
+      $self->log_warn("Can't merge without CPAN::Meta::Merge");
+    }
+  }
+
+  return \%metadata;
 }
 
 #lifted from Module::Build::Base

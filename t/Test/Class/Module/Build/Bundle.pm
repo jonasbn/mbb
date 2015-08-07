@@ -6,23 +6,20 @@ use strict;
 use warnings;
 use Test::More;
 use CPAN::Meta;
-use CPAN::Meta::YAML;
 use Test::MockObject::Extends;
 use FindBin;
 use lib "$FindBin::Bin/../t";
 use File::Temp qw/ tempfile tempdir /;
 #require File::Temp;
 use Env qw($TEST_VERBOSE);
+use Data::Dumper;
 
 use base qw(Test::Class);
 
 sub startup : Test(startup) {
     my $test = shift;
 
-    my $yaml   = CPAN::Meta::YAML->new();
     my $tmpdir = tempdir( CLEANUP => 0 );
-    #my $tmpdir = File::Tempdir->new(CLEANUP => 0);
-    #my ($fh, $filename) = tempfile();
 
     if ($TEST_VERBOSE) {
         diag "Created temporary directory: ", $tmpdir;
@@ -32,7 +29,6 @@ sub startup : Test(startup) {
         diag sprintf "with permissions %04o\n", $mode & 07777;
     }
 
-    $test->{yaml}   = $yaml;
     $test->{tmpdir} = $tmpdir;
 }
 
@@ -41,8 +37,6 @@ sub setup : Test(setup => 3) {
 
     ok(-e $test->{tmpdir}, 'temporary directory created');
 
-    diag($test->{tmpdir});
-
     use_ok('Module::Build::Bundle');
 
     ok( my $build = Module::Build::Bundle->new(
@@ -50,7 +44,7 @@ sub setup : Test(setup => 3) {
             dist_version       => '6.66',
             dist_author        => 'jonasbn',
             dist_abstract      => 'this is a dummy',
-            configure_requires => { 'Module::Build' => '0.42' }
+            configure_requires => { 'Module::Build::Bundle' => '0.13' }
         ),
         'calling constructor'
     );
@@ -60,7 +54,7 @@ sub setup : Test(setup => 3) {
     $build->set_true('_add_to_manifest');
 
     $test->{version}   = $Module::Build::Bundle::VERSION;
-    $test->{package}   = ref $build;
+    $test->{package}   = 'Module::Build::Bundle'; #ref $build;
     $test->{build}     = $build;
     $test->{canonical} = $test->{version};
 }
@@ -69,12 +63,9 @@ sub do_create_metafile : Test(12) {
     my $test = shift;
 
     my $build             = $test->{build};
-    my $yaml              = $test->{yaml};
     my $package           = $test->{package};
     my $version           = $test->{version};
     my $canonical_version = $test->{canonical};
-
-    diag("tmpdir = ".$test->{tmpdir});
 
     ok( $build->metafile( $test->{tmpdir} . '/META.yml' ),
         'setting META file name to testMETA.yml' );
@@ -91,10 +82,6 @@ sub do_create_metafile : Test(12) {
 
     my $meta = CPAN::Meta->load_file($build->metafile);
 
-    if ( $yaml->errstr ) {
-        croak $yaml->errstr;
-    }
-
     like(
         $meta->{generated_by},
         qr/\A$package version \d+\.\d+(?:,\s+\w+)*/,
@@ -107,7 +94,7 @@ sub do_create_metafile : Test(12) {
         q[asserting 'generated_by']
     );
 
-    ok( my $req = $meta->{configure_requires},
+    ok( my $req = $meta->{prereqs}->{configure}->{requires},
         q[checking 'configure_requires']
     );
 
