@@ -18,6 +18,7 @@ my $build = Module::Build->new(
         'Env'                       => '0',
         'File::Copy'                => '0',
         'File::Slurp'               => '0',
+        'File::Stat'                => '0',
         'File::Tempdir'             => '0',
         'FindBin'                   => '0',
         'CPAN::Meta::YAML'          => '0',
