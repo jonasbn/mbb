@@ -85,7 +85,9 @@ SKIP: {
 
             my $mode = ( stat( $test->{tmpdir}->name.'/'.$test->{file} ) )[2];
 
-            diag sprintf "test file holds permissions %04o\n", $mode & 07777;
+            if ($TEST_VERBOSE) {
+                diag sprintf "test file holds permissions %04o\n", $mode & 07777;
+            }
         }
 
         ok( -e $test->{tmpdir}->name.'/'.$test->{file},  $test->{tmpdir}->name.'/'.$test->{file} . ' exists' );
@@ -127,7 +129,9 @@ SKIP: {
 
             my $mode = ( stat( $test->{tmpdir}->name.'/'.$test->{file} ) )[2];
 
-            diag sprintf "Dummy file holds permissions %04o\n", $mode & 07777;
+            if ($TEST_VERBOSE) {
+                diag sprintf "Dummy file holds permissions %04o\n", $mode & 07777;
+            }
         }
 
 
