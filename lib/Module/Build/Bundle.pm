@@ -13,7 +13,7 @@ use utf8;
 
 use constant EXTENDED_POD_LINK_VERSION => 5.12.0;
 
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 
 #HACK: we need a writable copy for testing purposes
 ## no critic qw(Variables::ProhibitPackageVars Variables::ProhibitPunctuationVars)

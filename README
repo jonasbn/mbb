@@ -2,7 +2,7 @@ NAME
     Module::Build::Bundle - subclass for supporting Tasks and Bundles
 
 VERSION
-    This documentation describes version 0.11
+    This documentation describes version 0.13
 
 SYNOPSIS
         #In your Build.PL
@@ -220,11 +220,11 @@ TEST AND QUALITY
         ---------------------------- ------ ------ ------ ------ ------ ------ ------
         File                           stmt   bran   cond    sub    pod   time  total
         ---------------------------- ------ ------ ------ ------ ------ ------ ------
-        lib/Module/Build/Bundle.pm     48.5   13.9   14.3   84.2  100.0  100.0   45.7
-        Total                          48.5   13.9   14.3   84.2  100.0  100.0   45.7
+        lib/Module/Build/Bundle.pm     44.5   18.3   23.0   70.5  100.0  100.0   39.6
+        Total                          44.5   18.3   23.0   70.5  100.0  100.0   39.6
         ---------------------------- ------ ------ ------ ------ ------ ------ ------
 
-    The above coverage report is based on release 0.11
+    The above coverage report is based on release 0.13
 
 QUALITY AND CODING STANDARD
     The code passes Perl::Critic tests a severity: 1 (brutal)
@@ -255,7 +255,8 @@ SEE ALSO
 
     *   CPAN
 
-    *   <CPAN::Bundle>
+    *   CPAN::Bundle
+        <http://cpansearch.perl.org/src/ANDK/CPAN-1.9402/lib/CPAN/Bundle.pm>
 
     *   <https://logiclab.jira.com/wiki/display/OPEN/Module-Build-Bundle>
 
@@ -291,8 +292,7 @@ AUTHOR
     *   Jonas B. Nielsen (jonasbn) "<jonasbn@cpan.org>"
 
 LICENSE AND COPYRIGHT
-    Copyright 2010-2013 jonasbn, all rights reserved.
+    Copyright 2010-2014 jonasbn, all rights reserved.
 
-    This program is free software; you can redistribute it and/or modify it
-    under the same terms as Perl itself.
+    Module::Build::Bundle is released under the Artistic License 2.0
 

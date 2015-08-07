@@ -1,9 +1,19 @@
 Changes file for Module::Build::Bundle
 
-0.13 2014-06-24, update recommended
+0.14 2015-08-07
 
-- Core implementation updated to comply with Module::Build 0.42, update
-  recommended
+- Bug fix release, update recommended
+
+- Addressed broken test suite [RT:94847]
+  
+  https://rt.cpan.org/Ticket/Display.html?id=94847
+
+
+0.13 2014-06-24
+
+- Significant maintenance release, update recommended 
+
+- Core implementation updated to comply with Module::Build 0.42
 
 - Changed license to be Artistic 2.0, please see the LICENSE file included
   with the distribution

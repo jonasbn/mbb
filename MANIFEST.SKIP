@@ -63,3 +63,10 @@ spikes
 
 # Github - Travis integration
 \.travis\.yml
+
+# Github
+README\.mkdn
+
+# SublimeText files
+\.sublime-project
+\.sublime-workspace
