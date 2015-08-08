@@ -44,7 +44,7 @@ sub setup : Test(setup => 3) {
             dist_version       => '6.66',
             dist_author        => 'jonasbn',
             dist_abstract      => 'this is a dummy',
-            configure_requires => { 'Module::Build::Bundle' => '0.13' }
+            configure_requires => { 'Module::Build::Bundle' => $Module::Build::Bundle::VERSION }
         ),
         'calling constructor'
     );
