@@ -1,11 +1,17 @@
 Changes file for Module::Build::Bundle
 
-0.14 2015-08-07
+0.14 2015-08-08
 
 - Bug fix release, update recommended
 
 - Addressed broken test suite [RT:94847]
   
+  introducing the following methods lifted from Module::Build::Base:
+
+  - do_create_metafile
+  - get_metadata
+  - _get_meta_object
+
   https://rt.cpan.org/Ticket/Display.html?id=94847
 
 
