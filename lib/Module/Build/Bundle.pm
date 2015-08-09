@@ -134,49 +134,7 @@ sub do_create_metafile {
   return 1;
 }
 
-#Liften from Module::Build, no changes yet
-sub _get_meta_object {
-  my $self = shift;
-  my %args = @_;
-  return unless $self->try_require("CPAN::Meta", "2.110420");
-
-  my $meta;
-  eval {
-    my $data = $self->get_metadata(
-      fatal => $args{fatal},
-      auto => $args{auto},
-    );
-    $data->{dynamic_config} = $args{dynamic} if defined $args{dynamic};
-    $meta = CPAN::Meta->create($data);
-  };
-  if ($@ && ! $args{quiet}) {
-    $self->log_warn(
-      "Could not get valid metadata. Error is: $@\n"
-    );
-  }
-
-  return $meta;
-}
-
-#lifted from Module::Build::Base, no changes yet
-sub _write_meta_files {
-  my $self = shift;
-  my ($meta, $file) = @_;
-  $file =~ s{\.(?:yml|json)$}{};
- 
-  my @created;
-  push @created, "$file\.yml"
-    if $meta && $meta->save( "$file\.yml", {version => "1.4"} );
-  push @created, "$file\.json"
-    if $meta && $meta->save( "$file\.json" );
- 
-  if ( @created ) {
-    $self->log_info("Created " . join(" and ", @created) . "\n");
-  }
-  return @created;
-}
-
-#lifted from Module::Build::Base, no changes yet
+#lifted from Module::Build::Base, sets generated_by 
 sub get_metadata {
   my ($self, %args) = @_;
 
@@ -258,7 +216,8 @@ sub get_metadata {
   return \%metadata;
 }
 
-#lifted from Module::Build::Base
+#lifted from Module::Build::Base, added package and version resolution and 
+# addition to configure requires
 sub prepare_metadata {
   my ($self, $node, $keys) = @_;
   my $p = $self->{properties};
@@ -533,14 +492,6 @@ The method was overwritten to be more testable. The method created the relevant
 META file.
 
 It passes a more general file parameter for testing instead of a hard-coded filename.
-
-=head2 _write_metafiles
-
-This method has been lifted from L<Module::Build::Base|Module::Build::Base>.
-
-=head2 _get_meta_object
-
-This method has been lifted from L<Module::Build::Base|Module::Build::Base>.
 
 =head1 DIAGNOSTICS
 
