@@ -9,9 +9,6 @@ verbose  = 8
 [Documentation::RequirePodSections]
 lib_sections    = NAME|SYNOPSIS|VERSION|DESCRIPTION|SUBROUTINES/METHODS|DIAGNOSTICS|CONFIGURATION AND ENVIRONMENT|DEPENDENCIES|TEST AND QUALITY|QUALITY AND CODING STANDARD|BUGS AND LIMITATIONS|BUG REPORTING|DEVELOPMENT|TODO|SEE ALSO|AUTHOR|LICENSE AND COPYRIGHT
 
-[Miscellanea::RequireRcsKeywords]
-keywords = Id
-
 [CodeLayout::ProhibitHardTabs]
 allow_leading_tabs = 0
 
@@ -28,23 +25,18 @@ allow = $@ $!
 #https://logiclab.jira.com/wiki/display/OPEN/Perl-Critic-Policy-ValuesAndExpressions-ProhibitConstantPragma
 [-ValuesAndExpressions::ProhibitConstantPragma]
 
-#I don't use Emacs
-[-Editor::RequireEmacsFileVariables]
-
 #We subclass Module::Build so this is required
 [-NamingConventions::Capitalization]
 
-#I prefer UTF-8 
-[-CodeLayout::RequireASCII]
-
-#The policy unfortunately catches TODO in the POD
-[-Bangs::ProhibitFlagComments]
-
 # TODO
 
-[-InputOutput::RequireBracedFileHandleWithPrint]
+[-BuiltinFunctions::ProhibitStringyEval]
 
-[-ErrorHandling::RequireUseOfExceptions]
+[-ErrorHandling::RequireCarping]
+
+[-Subroutines::ProhibitExcessComplexity]
+
+[-InputOutput::RequireBracedFileHandleWithPrint]
 
 [-RegularExpressions::RequireExtendedFormatting]
 
@@ -64,11 +56,5 @@ allow = $@ $!
 
 #Variables::ProhibitPunctuationVars needs to be addressed in local disabling
 
-[-Documentation::ProhibitVerbatimMarkup]
-
-[-Compatibility::PodMinimumVersion]
-
 #Issue in code lifted from Module::Build
 [-ControlStructures::ProhibitCascadingIfElse]
-
-[-Miscellanea::RequireRcsKeywords]
