@@ -105,7 +105,8 @@ Changes file for Module::Build::Bundle
 - Investigated create_makefile_pl [MBB-29]
   http://logiclab.jira.com/browse/MBB-29
 
-- Described current limitation in POD in regard to root based distributions	[MBB-30]
+- Described current limitation in POD in regard to root based distributions	
+  [MBB-30]
   http://logiclab.jira.com/browse/MBB-30
 
 
