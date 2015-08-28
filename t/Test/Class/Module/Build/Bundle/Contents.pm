@@ -1,7 +1,5 @@
 package Test::Class::Module::Build::Bundle::Contents;
 
-# $Id$
-
 use strict;
 use warnings;
 use Test::More;
