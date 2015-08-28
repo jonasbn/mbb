@@ -13,7 +13,7 @@ use utf8;
 
 use constant EXTENDED_POD_LINK_VERSION => 5.12.0;
 
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 
 #HACK: we need a writable copy for testing purposes
 ## no critic qw(Variables::ProhibitPackageVars Variables::ProhibitPunctuationVars)
@@ -339,7 +339,7 @@ Module::Build::Bundle - subclass for supporting Tasks and Bundles
 
 =head1 VERSION
 
-This documentation describes version 0.14
+This documentation describes version 0.16
 
 =head1 SYNOPSIS
 

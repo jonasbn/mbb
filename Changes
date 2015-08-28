@@ -1,5 +1,10 @@
 Changes file for Module::Build::Bundle
 
+0.16 2015-08-28 Maintenance release, update not required
+
+- Fixed issue with test dependencies, Text::Soundex was missing
+
+
 0.15 2015-08-11 Maintenance release, update not required
 
 - Ported from Module::Build to Dist::Zilla [#1]
