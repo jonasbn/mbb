@@ -497,6 +497,12 @@ META file.
 
 It passes a more general file parameter for testing instead of a hard-coded filename.
 
+=head2 is_windowsish
+
+Required overwritten by Module::Build, when subclassing.
+
+Ref: https://metacpan.org/pod/distribution/Module-Build/lib/Module/Build/API.pod
+
 =head1 DIAGNOSTICS
 
 =over
