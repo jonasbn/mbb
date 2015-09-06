@@ -1,6 +1,11 @@
 Changes file for Module::Build::Bundle
 
-0.16 2015-08-28 Maintenance release, update not required
+HEAD
+
+- Added is_windowsish as required by Module::Build for sub-classing
+
+
+0.16 2015-09-06 Bug fix release, update not required
 
 - Fixed issue with test dependencies, Text::Soundex was missing
 
