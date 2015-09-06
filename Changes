@@ -1,6 +1,6 @@
 Changes file for Module::Build::Bundle
 
-HEAD
+0.17 2015-09-06 Maintenance release, update not required
 
 - Added is_windowsish as required by Module::Build for sub-classing
 
