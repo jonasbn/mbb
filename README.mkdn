@@ -299,6 +299,7 @@ but then I needed it for some other distributions, so I decided to separate it o
 - The [Module::Build](https://metacpan.org/pod/Module::Build) developers
 - Lars Dɪᴇᴄᴋᴏᴡ (DAXIM) for reporting RT:83754, resulting in release 0.11
 - Andreas J. König (ANDK) for reporting RT:82128, included in release 0.10
+- Slaven Rezić for reporting issue #2
 
 # AUTHOR
 
