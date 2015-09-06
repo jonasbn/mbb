@@ -4,6 +4,11 @@ Changes file for Module::Build::Bundle
 
 - Fixed issue with test dependencies, Text::Soundex was missing
 
+- Addressed issue #2, File::stat used instead of File::Stat
+
+  https://github.com/jonasbn/mbb/issues/2
+  https://rt.cpan.org/Ticket/Display.html?id=83208
+  
 
 0.15 2015-08-11 Maintenance release, update not required
 
