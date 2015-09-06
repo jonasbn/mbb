@@ -317,6 +317,10 @@ sub prepare_metadata {
   return $node;
 }
 
+sub is_windowsish {
+  return 0;
+}
+
 1;
 
 __END__
