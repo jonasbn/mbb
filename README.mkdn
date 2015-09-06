@@ -8,7 +8,7 @@ Module::Build::Bundle - subclass for supporting Tasks and Bundles
 
 # VERSION
 
-This documentation describes version 0.16
+This documentation describes version 0.17
 
 # SYNOPSIS
 
@@ -146,6 +146,12 @@ The method was overwritten to be more testable. The method created the relevant
 META file.
 
 It passes a more general file parameter for testing instead of a hard-coded filename.
+
+## is\_windowsish
+
+Required overwritten by Module::Build, when subclassing.
+
+Ref: https://metacpan.org/pod/distribution/Module-Build/lib/Module/Build/API.pod
 
 # DIAGNOSTICS
 
