@@ -689,6 +689,8 @@ but then I needed it for some other distributions, so I decided to separate it o
 
 =item * Andreas J. König (ANDK) for reporting RT:82128, included in release 0.10
 
+=item * Slaven Rezić for reporting issue #2
+
 =back
 
 =head1 AUTHOR
