@@ -6,7 +6,7 @@ use Test::More;
 use File::Copy qw(cp);
 use Test::Exception;
 use File::Tempdir;
-use File::Stat;
+use File::stat;
 use File::Slurp;    #read_file
 use Env qw($TEST_VERBOSE);
 
